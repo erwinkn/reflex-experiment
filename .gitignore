@@ -13,3 +13,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# We made custom modifications in .web
+!.web

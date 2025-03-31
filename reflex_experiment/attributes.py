@@ -8,7 +8,7 @@ CrossOrigin = Literal["anonymous", "use-credentials", ""] | None
 
 
 # DOMEvents is a non-total TypedDict
-class HTMLAttributes(DOMEvents, TypedDict, total=False):
+class HTMLAttributes(DOMEvents):
     # React-specific Attributes
     default_checked: bool
     default_value: Union[str, int, List[str]]
@@ -107,7 +107,7 @@ HTMLAttributeReferrerPolicy = Literal[
 ]
 
 
-class AnchorHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class AnchorHTMLAttributes(HTMLAttributes):
     download: Any
     href: str
     href_lang: str
@@ -118,7 +118,7 @@ class AnchorHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     referrer_policy: HTMLAttributeReferrerPolicy
 
 
-class AreaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class AreaHTMLAttributes(HTMLAttributes):
     alt: str
     coords: str
     download: Any
@@ -130,16 +130,16 @@ class AreaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     target: str
 
 
-class BaseHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class BaseHTMLAttributes(HTMLAttributes):
     href: str
     target: str
 
 
-class BlockquoteHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class BlockquoteHTMLAttributes(HTMLAttributes):
     cite: str
 
 
-class ButtonHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ButtonHTMLAttributes(HTMLAttributes):
     disabled: bool
     form: str
     # NOTE: support form_action callbacks?
@@ -153,54 +153,54 @@ class ButtonHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     value: Union[str, List[str], int]
 
 
-class CanvasHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class CanvasHTMLAttributes(HTMLAttributes):
     height: Union[int, str]
     width: Union[int, str]
 
 
-class ColHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ColHTMLAttributes(HTMLAttributes):
     span: int
     width: Union[int, str]
 
 
-class ColgroupHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ColgroupHTMLAttributes(HTMLAttributes):
     span: int
 
 
-class DataHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class DataHTMLAttributes(HTMLAttributes):
     value: Union[str, List[str], int]
 
 
-class DetailsHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class DetailsHTMLAttributes(HTMLAttributes):
     open: bool
     name: str
 
 
-class DelHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class DelHTMLAttributes(HTMLAttributes):
     cite: str
     date_time: str
 
 
-class DialogHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class DialogHTMLAttributes(HTMLAttributes):
     on_cancel: EventHandler
     on_close: EventHandler
     open: bool
 
 
-class EmbedHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class EmbedHTMLAttributes(HTMLAttributes):
     height: Union[int, str]
     src: str
     type: str
     width: Union[int, str]
 
 
-class FieldsetHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class FieldsetHTMLAttributes(HTMLAttributes):
     disabled: bool
     form: str
     name: str
 
 
-class FormHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class FormHTMLAttributes(HTMLAttributes):
     accept_charset: str
     # NOTE: support action callbacks?
     action: str
@@ -212,11 +212,11 @@ class FormHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     target: str
 
 
-class HtmlHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class HtmlHTMLAttributes(HTMLAttributes):
     manifest: str
 
 
-class IframeHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class IframeHTMLAttributes(HTMLAttributes):
     allow: str
     allow_full_screen: bool
     allow_transparency: bool
@@ -235,7 +235,7 @@ class IframeHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     width: Union[int, str]
 
 
-class ImgHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ImgHTMLAttributes(HTMLAttributes):
     alt: str
     cross_origin: CrossOrigin
     decoding: Literal["async", "auto", "sync"]
@@ -250,7 +250,7 @@ class ImgHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     width: Union[int, str]
 
 
-class InsHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class InsHTMLAttributes(HTMLAttributes):
     cite: str
     date_time: str
 
@@ -284,7 +284,7 @@ HTMLInputType = (
 )
 
 
-class InputHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class InputHTMLAttributes(HTMLAttributes):
     accept: str
     alt: str
     auto_complete: str  # HTMLInputAutoCompleteAttribute
@@ -319,7 +319,7 @@ class InputHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     on_change: EventHandler
 
 
-class KeygenHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class KeygenHTMLAttributes(HTMLAttributes):
     challenge: str
     disabled: bool
     form: str
@@ -328,16 +328,16 @@ class KeygenHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     name: str
 
 
-class LabelHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class LabelHTMLAttributes(HTMLAttributes):
     form: str
     html_for: str
 
 
-class LiHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class LiHTMLAttributes(HTMLAttributes):
     value: Union[str, List[str], int]
 
 
-class LinkHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class LinkHTMLAttributes(HTMLAttributes):
     as_: str
     cross_origin: CrossOrigin
     fetch_priority: Literal["high", "low", "auto"]
@@ -354,15 +354,15 @@ class LinkHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     precedence: str
 
 
-class MapHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class MapHTMLAttributes(HTMLAttributes):
     name: str
 
 
-class MenuHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class MenuHTMLAttributes(HTMLAttributes):
     type: str
 
 
-class MediaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class MediaHTMLAttributes(HTMLAttributes):
     auto_play: bool
     controls: bool
     controls_list: str
@@ -376,11 +376,11 @@ class MediaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
 
 
 # Note: not alphabetical order due to inheritance
-class AudioHTMLAttributes(MediaHTMLAttributes, TypedDict, total=False):
+class AudioHTMLAttributes(MediaHTMLAttributes):
     pass
 
 
-class MetaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class MetaHTMLAttributes(HTMLAttributes):
     char_set: str
     content: str
     http_equiv: str
@@ -388,7 +388,7 @@ class MetaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     name: str
 
 
-class MeterHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class MeterHTMLAttributes(HTMLAttributes):
     form: str
     high: int
     low: int
@@ -398,11 +398,11 @@ class MeterHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     value: Union[str, List[str], int]
 
 
-class QuoteHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class QuoteHTMLAttributes(HTMLAttributes):
     cite: str
 
 
-class ObjectHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ObjectHTMLAttributes(HTMLAttributes):
     class_id: str
     data: str
     form: str
@@ -414,45 +414,45 @@ class ObjectHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     wmode: str
 
 
-class OlHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class OlHTMLAttributes(HTMLAttributes):
     reversed: bool
     start: int
     type: Literal["1", "a", "A", "i", "I"]
 
 
-class OptgroupHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class OptgroupHTMLAttributes(HTMLAttributes):
     disabled: bool
     label: str
 
 
-class OptionHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class OptionHTMLAttributes(HTMLAttributes):
     disabled: bool
     label: str
     selected: bool
     value: Union[str, List[str], int]
 
 
-class OutputHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class OutputHTMLAttributes(HTMLAttributes):
     form: str
     html_for: str
     name: str
 
 
-class ParamHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ParamHTMLAttributes(HTMLAttributes):
     name: str
     value: Union[str, List[str], int]
 
 
-class ProgressHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ProgressHTMLAttributes(HTMLAttributes):
     max: Union[int, str]
     value: Union[str, List[str], int]
 
 
-class SlotHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class SlotHTMLAttributes(HTMLAttributes):
     name: str
 
 
-class ScriptHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ScriptHTMLAttributes(HTMLAttributes):
     async_: bool
     char_set: str  # deprecated
     cross_origin: CrossOrigin
@@ -464,7 +464,7 @@ class ScriptHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     type: str
 
 
-class SelectHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class SelectHTMLAttributes(HTMLAttributes):
     auto_complete: str
     disabled: bool
     form: str
@@ -475,7 +475,7 @@ class SelectHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     value: Union[str, List[str], int]
 
 
-class SourceHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class SourceHTMLAttributes(HTMLAttributes):
     height: Union[int, str]
     media: str
     sizes: str
@@ -485,7 +485,7 @@ class SourceHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     width: Union[int, str]
 
 
-class StyleHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class StyleHTMLAttributes(HTMLAttributes):
     media: str
     scoped: bool
     type: str
@@ -493,7 +493,7 @@ class StyleHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     precedence: str
 
 
-class TableHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class TableHTMLAttributes(HTMLAttributes):
     align: Literal["left", "center", "right"]
     bgcolor: str
     border: int
@@ -505,7 +505,7 @@ class TableHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     width: Union[int, str]
 
 
-class TextareaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class TextareaHTMLAttributes(HTMLAttributes):
     auto_complete: str
     cols: int
     dir_name: str
@@ -522,7 +522,7 @@ class TextareaHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     wrap: str
 
 
-class TdHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class TdHTMLAttributes(HTMLAttributes):
     align: Literal["left", "center", "right", "justify", "char"]
     col_span: int
     headers: str
@@ -534,7 +534,7 @@ class TdHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     valign: Literal["top", "middle", "bottom", "baseline"]
 
 
-class ThHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class ThHTMLAttributes(HTMLAttributes):
     align: Literal["left", "center", "right", "justify", "char"]
     col_span: int
     headers: str
@@ -543,11 +543,11 @@ class ThHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     abbr: str
 
 
-class TimeHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class TimeHTMLAttributes(HTMLAttributes):
     date_time: str
 
 
-class TrackHTMLAttributes(HTMLAttributes, TypedDict, total=False):
+class TrackHTMLAttributes(HTMLAttributes):
     default: bool
     kind: str
     label: str
@@ -555,7 +555,7 @@ class TrackHTMLAttributes(HTMLAttributes, TypedDict, total=False):
     src_lang: str
 
 
-class VideoHTMLAttributes(MediaHTMLAttributes, TypedDict, total=False):
+class VideoHTMLAttributes(MediaHTMLAttributes):
     height: Union[int, str]
     plays_inline: bool
     poster: str
@@ -564,7 +564,7 @@ class VideoHTMLAttributes(MediaHTMLAttributes, TypedDict, total=False):
     disable_remote_playback: bool
 
 
-class SVGAttributes(HTMLAttributes, TypedDict, total=False):
+class SVGAttributes(HTMLAttributes):
     """SVG attributes supported by React"""
 
     # React-specific attributes
@@ -852,7 +852,7 @@ class SVGAttributes(HTMLAttributes, TypedDict, total=False):
     zoom_and_pan: str
 
 
-class WebViewAttributes(HTMLAttributes, TypedDict, total=False):
+class WebViewAttributes(HTMLAttributes):
     allow_full_screen: bool
     allowpopups: bool
     autosize: bool
