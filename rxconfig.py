@@ -11,5 +11,5 @@ config = rx.Config(
             # This one we add for our custom components
             "./custom/**/*.{js,ts,jsx,tsx}",
         ],
-    }
+    },
 )

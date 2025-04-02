@@ -4,14 +4,10 @@
 # an element, its size, or its value).
 
 from typing import Any, Literal, Optional, Union, Dict
-import reflex as rx
-from pydantic.v1 import Field
+from pydantic.v1 import Field, BaseModel
 
 
-# rx.Base is a wrapper around a Pydantic v1 Model
-
-
-class Element(rx.Base):
+class Element(BaseModel):
     # Basic properties
     id: str
     class_name: str
@@ -27,16 +23,15 @@ class Element(rx.Base):
     scroll_width: float
     slot: str
 
-    # Not including innerHTML and outerHTML as those could be heavy
 
-
-class HTMLOrSVGElement(rx.Base):
+class HTMLOrSVGElement(BaseModel):
     autofocus: bool
     tab_index: int
     nonce: Optional[str]
+    # Not including dataset as it's not useful
 
 
-class BaseHTMLElement(Element, HTMLOrSVGElement):
+class HTMLElementBase(Element, HTMLOrSVGElement):
     access_key: str
     access_key_label: str
     autocapitalize: str
@@ -45,7 +40,6 @@ class BaseHTMLElement(Element, HTMLOrSVGElement):
     hidden: bool
     inert: bool
     lang: str
-
     offset_height: float  # Read-only layout properties
     offset_left: float
     # offset_parent: Element | None # could be complex to serialize
@@ -57,17 +51,16 @@ class BaseHTMLElement(Element, HTMLOrSVGElement):
     translate: bool
     writing_suggestions: str
 
-    # Added properties from HTMLElement definition
+    # Added properties from ELementContentEditable definition
     content_editable: str
     enter_key_hint: str
     is_content_editable: bool
     input_mode: str
-    dataset: Dict[str, str]
 
     # Not including inner_text and outer_text as those could be heavy
 
 
-class HTMLAnchorElement(BaseHTMLElement):
+class HTMLAnchorElement(HTMLElementBase):
     """Properties specific to <a> elements."""
 
     tag_name: Literal["a"]
@@ -105,7 +98,7 @@ class HTMLAnchorElement(BaseHTMLElement):
     text: str
 
 
-class HTMLAreaElement(BaseHTMLElement):
+class HTMLAreaElement(HTMLElementBase):
     """Properties specific to <area> elements."""
 
     tag_name: Literal["area"]
@@ -143,7 +136,7 @@ class HTMLAreaElement(BaseHTMLElement):
     ]
 
 
-class HTMLMediaElement(BaseHTMLElement):
+class HTMLMediaElement(HTMLElementBase):
     """Properties specific to media elements like <audio> and <video>."""
 
     autoplay: bool
@@ -176,7 +169,7 @@ class HTMLAudioElement(HTMLMediaElement):
     tag_name: Literal["audio"]
 
 
-class HTMLButtonElement(BaseHTMLElement):
+class HTMLButtonElement(HTMLElementBase):
     """Properties specific to <button> elements."""
 
     tag_name: Literal["button"]
@@ -195,7 +188,7 @@ class HTMLButtonElement(BaseHTMLElement):
     popover_target_action: str
 
 
-class HTMLDataElement(BaseHTMLElement):
+class HTMLDataElement(HTMLElementBase):
     """Properties specific to <data> elements."""
 
     tag_name: Literal["data"]
@@ -203,7 +196,7 @@ class HTMLDataElement(BaseHTMLElement):
     value: str
 
 
-class HTMLEmbedElement(BaseHTMLElement):
+class HTMLEmbedElement(HTMLElementBase):
     """Properties specific to <embed> elements."""
 
     tag_name: Literal["embed"]
@@ -218,7 +211,7 @@ class HTMLEmbedElement(BaseHTMLElement):
     name: str
 
 
-class HTMLFieldSetElement(BaseHTMLElement):
+class HTMLFieldSetElement(HTMLElementBase):
     """Properties specific to <fieldset> elements."""
 
     tag_name: Literal["fieldset"]
@@ -232,7 +225,7 @@ class HTMLFieldSetElement(BaseHTMLElement):
     will_validate: bool
 
 
-class HTMLFormElement(BaseHTMLElement):
+class HTMLFormElement(HTMLElementBase):
     """Properties specific to <form> elements."""
 
     tag_name: Literal["form"]
@@ -254,7 +247,7 @@ class HTMLFormElement(BaseHTMLElement):
     rel: str
 
 
-class HTMLIFrameElement(BaseHTMLElement):
+class HTMLIFrameElement(HTMLElementBase):
     """Properties specific to <iframe> elements."""
 
     tag_name: Literal["iframe"]
@@ -287,7 +280,7 @@ class HTMLIFrameElement(BaseHTMLElement):
     sandbox: str
 
 
-class HTMLImageElement(BaseHTMLElement):
+class HTMLImageElement(HTMLElementBase):
     """Properties specific to <img> elements."""
 
     tag_name: Literal["img"]
@@ -330,7 +323,7 @@ class HTMLImageElement(BaseHTMLElement):
     fetch_priority: Literal["high", "low", "auto"]
 
 
-class HTMLInputElement(BaseHTMLElement):
+class HTMLInputElement(HTMLElementBase):
     """Properties specific to <input> elements."""
 
     tag_name: Literal["input"]
@@ -380,7 +373,7 @@ class HTMLInputElement(BaseHTMLElement):
     popover_target_action: str
 
 
-class HTMLLabelElement(BaseHTMLElement):
+class HTMLLabelElement(HTMLElementBase):
     """Properties specific to <label> elements."""
 
     tag_name: Literal["label"]
@@ -388,7 +381,7 @@ class HTMLLabelElement(BaseHTMLElement):
     html_for: str  # Corresponds to 'for' attribute
 
 
-class HTMLLiElement(BaseHTMLElement):
+class HTMLLiElement(HTMLElementBase):
     """Properties specific to <li> elements."""
 
     tag_name: Literal["li"]
@@ -397,7 +390,7 @@ class HTMLLiElement(BaseHTMLElement):
     type: str
 
 
-class HTMLLinkElement(BaseHTMLElement):
+class HTMLLinkElement(HTMLElementBase):
     """Properties specific to <link> elements."""
 
     tag_name: Literal["link"]
@@ -432,7 +425,7 @@ class HTMLLinkElement(BaseHTMLElement):
     sizes: str
 
 
-class HTMLMapElement(BaseHTMLElement):
+class HTMLMapElement(HTMLElementBase):
     """Properties specific to <map> elements."""
 
     tag_name: Literal["map"]
@@ -440,7 +433,7 @@ class HTMLMapElement(BaseHTMLElement):
     name: str
 
 
-class HTMLMeterElement(BaseHTMLElement):
+class HTMLMeterElement(HTMLElementBase):
     """Properties specific to <meter> elements."""
 
     tag_name: Literal["meter"]
@@ -453,7 +446,7 @@ class HTMLMeterElement(BaseHTMLElement):
     value: float
 
 
-class HTMLModElement(BaseHTMLElement):
+class HTMLModElement(HTMLElementBase):
     """Properties specific to <ins> and <del> elements."""
 
     tag_name: Literal["ins", "del"]
@@ -462,7 +455,7 @@ class HTMLModElement(BaseHTMLElement):
     date_time: str  # Corresponds to 'datetime' attribute
 
 
-class HTMLOListElement(BaseHTMLElement):
+class HTMLOListElement(HTMLElementBase):
     """Properties specific to <ol> elements."""
 
     tag_name: Literal["ol"]
@@ -473,7 +466,7 @@ class HTMLOListElement(BaseHTMLElement):
     compact: bool
 
 
-class HTMLObjectElement(BaseHTMLElement):
+class HTMLObjectElement(HTMLElementBase):
     """Properties specific to <object> elements."""
 
     tag_name: Literal["object"]
@@ -501,7 +494,7 @@ class HTMLObjectElement(BaseHTMLElement):
     will_validate: bool
 
 
-class HTMLOptGroupElement(BaseHTMLElement):
+class HTMLOptGroupElement(HTMLElementBase):
     """Properties specific to <optgroup> elements."""
 
     tag_name: Literal["optgroup"]
@@ -510,7 +503,7 @@ class HTMLOptGroupElement(BaseHTMLElement):
     label: str
 
 
-class HTMLOptionElement(BaseHTMLElement):
+class HTMLOptionElement(HTMLElementBase):
     """Properties specific to <option> elements."""
 
     tag_name: Literal["option"]
@@ -524,7 +517,7 @@ class HTMLOptionElement(BaseHTMLElement):
     value: str
 
 
-class HTMLOutputElement(BaseHTMLElement):
+class HTMLOutputElement(HTMLElementBase):
     """Properties specific to <output> elements."""
 
     tag_name: Literal["output"]
@@ -540,7 +533,7 @@ class HTMLOutputElement(BaseHTMLElement):
     will_validate: bool
 
 
-class HTMLProgressElement(BaseHTMLElement):
+class HTMLProgressElement(HTMLElementBase):
     """Properties specific to <progress> elements."""
 
     tag_name: Literal["progress"]
@@ -550,7 +543,7 @@ class HTMLProgressElement(BaseHTMLElement):
     value: float
 
 
-class HTMLQuoteElement(BaseHTMLElement):
+class HTMLQuoteElement(HTMLElementBase):
     """Properties specific to <q> and <blockquote> elements."""
 
     tag_name: Literal["q", "blockquote"]
@@ -558,13 +551,13 @@ class HTMLQuoteElement(BaseHTMLElement):
     cite: str
 
 
-class HTMLCiteElement(BaseHTMLElement):
+class HTMLCiteElement(HTMLElementBase):
     """Properties specific to <cite> elements."""
 
     tag_name: Literal["cite"]
 
 
-class HTMLScriptElement(BaseHTMLElement):
+class HTMLScriptElement(HTMLElementBase):
     """Properties specific to <script> elements."""
 
     tag_name: Literal["script"]
@@ -596,7 +589,7 @@ class HTMLScriptElement(BaseHTMLElement):
     html_for: str
 
 
-class HTMLSelectElement(BaseHTMLElement):
+class HTMLSelectElement(HTMLElementBase):
     """Properties specific to <select> elements."""
 
     tag_name: Literal["select"]
@@ -617,7 +610,7 @@ class HTMLSelectElement(BaseHTMLElement):
     will_validate: bool
 
 
-class HTMLSlotElement(BaseHTMLElement):
+class HTMLSlotElement(HTMLElementBase):
     """Properties specific to <slot> elements."""
 
     tag_name: Literal["slot"]
@@ -625,7 +618,7 @@ class HTMLSlotElement(BaseHTMLElement):
     name: str
 
 
-class HTMLSourceElement(BaseHTMLElement):
+class HTMLSourceElement(HTMLElementBase):
     """Properties specific to <source> elements."""
 
     tag_name: Literal["source"]
@@ -639,14 +632,14 @@ class HTMLSourceElement(BaseHTMLElement):
     width: int
 
 
-class HTMLTableCaptionElement(BaseHTMLElement):
+class HTMLTableCaptionElement(HTMLElementBase):
     """Properties specific to <caption> elements."""
 
     tag_name: Literal["caption"]
     align: str
 
 
-class HTMLTableCellElement(BaseHTMLElement):
+class HTMLTableCellElement(HTMLElementBase):
     """Properties specific to <td> and <th> elements."""
 
     tag_name: Literal["td", "th"]
@@ -670,7 +663,7 @@ class HTMLTableCellElement(BaseHTMLElement):
     width: str
 
 
-class HTMLTableColElement(BaseHTMLElement):
+class HTMLTableColElement(HTMLElementBase):
     """Properties specific to <col> and <colgroup> elements."""
 
     tag_name: Literal["col", "colgroup"]
@@ -685,7 +678,7 @@ class HTMLTableColElement(BaseHTMLElement):
     width: str
 
 
-class HTMLTableElement(BaseHTMLElement):
+class HTMLTableElement(HTMLElementBase):
     """Properties specific to <table> elements."""
 
     tag_name: Literal["table"]
@@ -708,7 +701,7 @@ class HTMLTableElement(BaseHTMLElement):
     width: str
 
 
-class HTMLTableRowElement(BaseHTMLElement):
+class HTMLTableRowElement(HTMLElementBase):
     """Properties specific to <tr> elements."""
 
     tag_name: Literal["tr"]
@@ -725,7 +718,7 @@ class HTMLTableRowElement(BaseHTMLElement):
     v_align: str
 
 
-class HTMLTableSectionElement(BaseHTMLElement):
+class HTMLTableSectionElement(HTMLElementBase):
     """Properties specific to <thead>, <tbody>, <tfoot> elements."""
 
     tag_name: Literal["thead", "tbody", "tfoot"]
@@ -738,7 +731,7 @@ class HTMLTableSectionElement(BaseHTMLElement):
     v_align: str
 
 
-class HTMLTemplateElement(BaseHTMLElement):
+class HTMLTemplateElement(HTMLElementBase):
     """Properties specific to <template> elements."""
 
     tag_name: Literal["template"]
@@ -747,7 +740,7 @@ class HTMLTemplateElement(BaseHTMLElement):
     pass
 
 
-class HTMLTextAreaElement(BaseHTMLElement):
+class HTMLTextAreaElement(HTMLElementBase):
     """Properties specific to <textarea> elements."""
 
     tag_name: Literal["textarea"]
@@ -776,7 +769,7 @@ class HTMLTextAreaElement(BaseHTMLElement):
     will_validate: bool
 
 
-class HTMLTimeElement(BaseHTMLElement):
+class HTMLTimeElement(HTMLElementBase):
     """Properties specific to <time> elements."""
 
     tag_name: Literal["time"]
@@ -784,7 +777,7 @@ class HTMLTimeElement(BaseHTMLElement):
     date_time: str  # Corresponds to 'datetime' attribute
 
 
-class HTMLTrackElement(BaseHTMLElement):
+class HTMLTrackElement(HTMLElementBase):
     """Properties specific to <track> elements."""
 
     tag_name: Literal["track"]
@@ -811,14 +804,14 @@ class HTMLVideoElement(HTMLMediaElement):
     plays_inline: bool
 
 
-class HTMLBRElement(BaseHTMLElement):
+class HTMLBRElement(HTMLElementBase):
     """Properties specific to <br> elements."""
 
     tag_name: Literal["br"]
     clear: str
 
 
-class HTMLBaseElement(BaseHTMLElement):
+class HTMLBaseElement(HTMLElementBase):
     """Properties specific to <base> elements."""
 
     tag_name: Literal["base"]
@@ -826,7 +819,7 @@ class HTMLBaseElement(BaseHTMLElement):
     target: str
 
 
-class HTMLBodyElement(BaseHTMLElement):
+class HTMLBodyElement(HTMLElementBase):
     """Properties specific to <body> elements."""
 
     tag_name: Literal["body"]
@@ -838,21 +831,21 @@ class HTMLBodyElement(BaseHTMLElement):
     v_link: str
 
 
-class HTMLDListElement(BaseHTMLElement):
+class HTMLDListElement(HTMLElementBase):
     """Properties specific to <dl> elements."""
 
     tag_name: Literal["dl"]
     compact: bool
 
 
-class HTMLDetailsElement(BaseHTMLElement):
+class HTMLDetailsElement(HTMLElementBase):
     """Properties specific to <details> elements."""
 
     tag_name: Literal["details"]
     open: bool
 
 
-class HTMLDialogElement(BaseHTMLElement):
+class HTMLDialogElement(HTMLElementBase):
     """Properties specific to <dialog> elements."""
 
     tag_name: Literal["dialog"]
@@ -860,27 +853,27 @@ class HTMLDialogElement(BaseHTMLElement):
     return_value: str
 
 
-class HTMLDivElement(BaseHTMLElement):
+class HTMLDivElement(HTMLElementBase):
     """Properties specific to <div> elements."""
 
     tag_name: Literal["div"]
     align: str
 
 
-class HTMLHeadElement(BaseHTMLElement):
+class HTMLHeadElement(HTMLElementBase):
     """Properties specific to <head> elements."""
 
     tag_name: Literal["head"]
 
 
-class HTMLHeadingElement(BaseHTMLElement):
+class HTMLHeadingElement(HTMLElementBase):
     """Properties specific to <h1> through <h6> elements."""
 
     tag_name: Literal["h1", "h2", "h3", "h4", "h5", "h6"]
     align: str
 
 
-class HTMLHRElement(BaseHTMLElement):
+class HTMLHRElement(HTMLElementBase):
     """Properties specific to <hr> elements."""
 
     tag_name: Literal["hr"]
@@ -891,20 +884,20 @@ class HTMLHRElement(BaseHTMLElement):
     width: str
 
 
-class HTMLHtmlElement(BaseHTMLElement):
+class HTMLHtmlElement(HTMLElementBase):
     """Properties specific to <html> elements."""
 
     tag_name: Literal["html"]
     version: str
 
 
-class HTMLMenuElement(BaseHTMLElement):
+class HTMLMenuElement(HTMLElementBase):
     """Properties specific to <menu> elements."""
 
     tag_name: Literal["menu"]
 
 
-class HTMLMetaElement(BaseHTMLElement):
+class HTMLMetaElement(HTMLElementBase):
     """Properties specific to <meta> elements."""
 
     tag_name: Literal["meta"]
@@ -914,34 +907,34 @@ class HTMLMetaElement(BaseHTMLElement):
     scheme: str
 
 
-class HTMLParagraphElement(BaseHTMLElement):
+class HTMLParagraphElement(HTMLElementBase):
     """Properties specific to <p> elements."""
 
     tag_name: Literal["p"]
     align: str
 
 
-class HTMLPictureElement(BaseHTMLElement):
+class HTMLPictureElement(HTMLElementBase):
     """Properties specific to <picture> elements."""
 
     tag_name: Literal["picture"]
 
 
-class HTMLPreElement(BaseHTMLElement):
+class HTMLPreElement(HTMLElementBase):
     """Properties specific to <pre> elements."""
 
     tag_name: Literal["pre"]
     width: int
 
 
-class HTMLSpanElement(BaseHTMLElement):
+class HTMLSpanElement(HTMLElementBase):
     """Properties specific to <span> elements."""
 
     tag_name: Literal["span"]
     # No additional properties
 
 
-class HTMLStyleElement(BaseHTMLElement):
+class HTMLStyleElement(HTMLElementBase):
     """Properties specific to <style> elements."""
 
     tag_name: Literal["style"]
@@ -950,14 +943,14 @@ class HTMLStyleElement(BaseHTMLElement):
     disabled: bool
 
 
-class HTMLTitleElement(BaseHTMLElement):
+class HTMLTitleElement(HTMLElementBase):
     """Properties specific to <title> elements."""
 
     tag_name: Literal["title"]
     text: str
 
 
-class HTMLUListElement(BaseHTMLElement):
+class HTMLUListElement(HTMLElementBase):
     """Properties specific to <ul> elements."""
 
     tag_name: Literal["ul"]
@@ -993,7 +986,6 @@ HTMLElement = Union[
     HTMLLiElement,
     HTMLLinkElement,
     HTMLMapElement,
-    HTMLMediaElement,
     HTMLMenuElement,
     HTMLMetaElement,
     HTMLMeterElement,
@@ -1029,4 +1021,4 @@ HTMLElement = Union[
     HTMLVideoElement,
 ]
 
-HTMLElementField = Field(HTMLElement, discriminator="tag_name")
+HTMLElementField = Field(discriminator="tag_name")

@@ -16,15 +16,18 @@ class AccordionProps(HTMLAttributes, total=False):
     orientation: Literal["vertical", "horizontal"]
 
 
-
-
 @with_props(AccordionProps)
 class AccordionRoot(rx.Component):
     """An accordion component based on shadcn/ui."""
 
     library = "$/custom/shadcn/accordion"
     tag = "Accordion"
-    lib_dependencies = ["clsx", "tailwind-merge", "@radix-ui/react-accordion", "lucide-react"]
+    lib_dependencies = [
+        "clsx",
+        "tailwind-merge",
+        "@radix-ui/react-accordion",
+        "lucide-react",
+    ]
 
     @classmethod
     def create(cls, *args, **kwargs: Unpack[AccordionProps]):

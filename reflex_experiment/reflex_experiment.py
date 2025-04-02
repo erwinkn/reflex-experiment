@@ -1,22 +1,20 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
 import reflex as rx
-from reflex_experiment.button import button
-# from rxconfig import config
-from reflex.event import EventCallback
-
-from reflex_experiment.events import PointerEvent
+from reflex_experiment.components.button import button
+from reflex_experiment.elements import HTMLButtonElement
+from reflex_experiment.events import MouseEvent
+from reflex_experiment.example import PointerEvent
 
 
 class State(rx.State):
     """The app state."""
 
     @rx.event
-    def handle_evt(self, value: PointerEvent):
+    def handle_evt(self, value: MouseEvent[HTMLButtonElement]):
         print(f"On click: {value} (type: {type(value)})")
         return None
 
-State.handle_evt
 
 def index() -> rx.Component:
     # Welcome Page (Index)
@@ -24,7 +22,7 @@ def index() -> rx.Component:
         rx.color_mode.button(position="top-right"),
         rx.vstack(
             rx.heading("Welcome to Reflex!", size="9"),
-            button("Click me!", class_name='bg-red-500', on_click=State.handle_evt),
+            button("Click me!", class_name="bg-red-500"),
             # rx.text(
             #     "Get started by editing ",
             #     rx.code(f"{config.app_name}/{config.app_name}.py"),

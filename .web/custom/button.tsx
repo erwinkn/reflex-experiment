@@ -64,7 +64,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 export { Button, buttonVariants };
-
-const _ = <input onChange={evt => {
-  evt.currentTarget.va
-}} />
