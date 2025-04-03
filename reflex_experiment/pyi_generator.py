@@ -38,6 +38,8 @@ EXCLUDED_FILES = [
     "literals.py",
 ]
 
+EXCLUDED_CLS = [Component]
+
 # These props exist on the base component, but should not be exposed in create methods.
 EXCLUDED_PROPS = [
     "alias",

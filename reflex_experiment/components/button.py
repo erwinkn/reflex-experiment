@@ -4,9 +4,8 @@ from reflex.event import EventHandler
 from reflex.components.component import DEFAULT_TRIGGERS
 from reflex.utils import types
 
-
-def test(ev: rx.Var) -> tuple[rx.Var[str], rx.Var[int]]:
-    return (rx.Var.create("somestring"), rx.Var.create(12))
+from reflex_experiment.elements import HTMLButtonElement
+from reflex_experiment.events import DOMEvents
 
 
 class Base(rx.Component):
@@ -22,14 +21,11 @@ class Base(rx.Component):
         return [*super()._exclude_props(), "class_name"]
 
 
-class Button(Base):
+class Button(Base, DOMEvents(HTMLButtonElement)):
     """A button component based on shadcn/ui."""
 
     library = "$/custom/button"
     tag = "Button"
-
-    foo: rx.Var[str]
-    on_bar: rx.EventHandler[test]
 
 
 button = Button.create
