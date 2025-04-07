@@ -33,9 +33,9 @@ class HTMLOrSVGElement(BaseModel):
 
 class HTMLElementBase(Element, HTMLOrSVGElement):
     access_key: str
-    access_key_label: str
+    access_key_label: Optional[str]
     autocapitalize: str
-    dir: Literal["ltr", "rtl", "auto"]
+    dir: Literal["", "ltr", "rtl", "auto"]
     draggable: bool
     hidden: bool
     inert: bool
@@ -774,7 +774,7 @@ class HTMLTimeElement(HTMLElementBase):
 
     tag_name: Literal["time"]
 
-    date_time: str  # Corresponds to 'datetime' attribute
+    datetime: str  # Corresponds to 'dateTime' attribute
 
 
 class HTMLTrackElement(HTMLElementBase):

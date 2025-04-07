@@ -63,7 +63,7 @@ DEFAULT_TYPING_IMPORTS = {
     "Any",
     "Callable",
     "Dict",
-    # "List",
+    "List",
     "Sequence",
     "Literal",
     "Optional",
@@ -357,9 +357,6 @@ def _extract_class_props_as_ast_nodes(
             continue
         # === CHANGED ===
         event_triggers = target_class._create([]).get_event_triggers()
-        print(
-            f"Target class {target_class.__name__}, event triggers = {list(event_triggers.keys())}"
-        )
         # Import from the target class to ensure type hints are resolvable.
         exec(f"from {target_class.__module__} import *", type_hint_globals)
         for name, value in target_class.__annotations__.items():
@@ -1136,7 +1133,6 @@ class PyiGenerator:
         }
         is_init_file = _relative_to_pwd(module_path).name == "__init__.py"
         if not class_names and not is_init_file:
-            print(f"[{module_path}] skip1")
             return
 
         if is_init_file:
@@ -1145,7 +1141,6 @@ class PyiGenerator:
             )
             init_imports = self._get_init_lazy_imports(module, new_tree)
             if not init_imports:
-                print(f"[{module_path}] skip2")
                 return
             self._write_pyi_file(module_path, init_imports)
         else:
@@ -1156,12 +1151,10 @@ class PyiGenerator:
         return str(module_path.with_suffix(".pyi").resolve())
 
     def _scan_files_multiprocess(self, files: list[Path]):
-        print("Scanning files multiprocess:", files)
         with Pool(processes=cpu_count()) as pool:
             self.written_files.extend(f for f in pool.map(self._scan_file, files) if f)
 
     def _scan_files(self, files: list[Path]):
-        print("Scanning files:", files)
         for file in files:
             pyi_path = self._scan_file(file)
             if pyi_path:
@@ -1177,9 +1170,6 @@ class PyiGenerator:
         file_targets = []
         for target in targets:
             target_path = Path(target)
-            print(
-                f"Target {target_path}, is_file = {target_path.is_file()}, is_dir = {target_path.is_dir()}"
-            )
             if (
                 target_path.is_file()
                 and target_path.suffix == ".py"

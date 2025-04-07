@@ -4,7 +4,6 @@ import reflex as rx
 from reflex_experiment.components.button import button
 from reflex_experiment.elements import HTMLButtonElement
 from reflex_experiment.events import MouseEvent
-from reflex_experiment.example import PointerEvent
 
 
 class State(rx.State):
@@ -22,7 +21,7 @@ def index() -> rx.Component:
         rx.color_mode.button(position="top-right"),
         rx.vstack(
             rx.heading("Welcome to Reflex!", size="9"),
-            button("Click me!", class_name="bg-red-500"),
+            button("Click me!", class_name="bg-red-500", on_click=State.handle_evt),
             # rx.text(
             #     "Get started by editing ",
             #     rx.code(f"{config.app_name}/{config.app_name}.py"),

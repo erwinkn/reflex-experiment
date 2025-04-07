@@ -60,7 +60,7 @@ export function extractElement(elt: Element): object {
   return {
     id: elt.id,
     class_name: elt.className,
-    tag_name: elt.tagName,
+    tag_name: elt.tagName.toLowerCase(),
     local_name: elt.localName,
     client_height: elt.clientHeight,
     client_left: elt.clientLeft,
@@ -130,7 +130,7 @@ export function extractHTMLAnchorElement(elt: HTMLAnchorElement) {
     type: elt.type,
     username: elt.username,
     ping: elt.ping,
-    referrerPolicy: elt.referrerPolicy,
+    referrer_policy: elt.referrerPolicy,
     text: elt.text,
   };
 }
@@ -156,7 +156,7 @@ export function extractHTMLAreaElement(elt: HTMLAreaElement) {
     target: elt.target,
     username: elt.username,
     ping: elt.ping,
-    referrerPolicy: elt.referrerPolicy,
+    referrer_policy: elt.referrerPolicy,
   };
 }
 
@@ -165,24 +165,24 @@ export function extractHTMLMediaElement(elt: HTMLMediaElement) {
     ...extractHTMLElementBase(elt),
     autoplay: elt.autoplay,
     controls: elt.controls,
-    crossOrigin: elt.crossOrigin,
-    currentSrc: elt.currentSrc,
-    currentTime: elt.currentTime,
-    defaultMuted: elt.defaultMuted,
-    defaultPlaybackRate: elt.defaultPlaybackRate,
+    cross_origin: elt.crossOrigin,
+    current_src: elt.currentSrc,
+    current_time: elt.currentTime,
+    default_muted: elt.defaultMuted,
+    default_playback_rate: elt.defaultPlaybackRate,
     duration: elt.duration,
     ended: elt.ended,
     loop: elt.loop,
     muted: elt.muted,
-    networkState: elt.networkState,
+    network_state: elt.networkState,
     paused: elt.paused,
-    playbackRate: elt.playbackRate,
+    playback_rate: elt.playbackRate,
     preload: elt.preload,
-    readyState: elt.readyState,
+    ready_state: elt.readyState,
     seeking: elt.seeking,
     src: elt.src,
     volume: elt.volume,
-    preservesPitch: elt.preservesPitch,
+    preserves_pitch: elt.preservesPitch,
   };
 }
 
@@ -200,12 +200,12 @@ export function extractHTMLButtonElement(elt: HTMLButtonElement) {
     name: elt.name,
     type: elt.type,
     value: elt.value,
-    formAction: elt.formAction,
-    formEnctype: elt.formEnctype,
-    formMethod: elt.formMethod,
-    formNoValidate: elt.formNoValidate,
-    formTarget: elt.formTarget,
-    popoverTargetAction: elt.popoverTargetAction,
+    form_action: elt.formAction,
+    form_enctype: elt.formEnctype,
+    form_method: elt.formMethod,
+    form_no_validate: elt.formNoValidate,
+    form_target: elt.formTarget,
+    popover_target_action: elt.popoverTargetAction,
   };
 }
 
@@ -234,15 +234,15 @@ export function extractHTMLFieldSetElement(elt: HTMLFieldSetElement) {
     disabled: elt.disabled,
     name: elt.name,
     type: elt.type,
-    validationMessage: elt.validationMessage,
-    willValidate: elt.willValidate,
+    validation_message: elt.validationMessage,
+    will_validate: elt.willValidate,
   };
 }
 
 export function extractHTMLFormElement(elt: HTMLFormElement) {
   return {
     ...extractHTMLElementBase(elt),
-    acceptCharset: elt.acceptCharset,
+    accept_charset: elt.acceptCharset,
     action: elt.action,
     autocomplete: elt.autocomplete,
     encoding: elt.encoding,
@@ -250,7 +250,7 @@ export function extractHTMLFormElement(elt: HTMLFormElement) {
     length: elt.length,
     method: elt.method,
     name: elt.name,
-    noValidate: elt.noValidate,
+    no_validate: elt.noValidate,
     target: elt.target,
     rel: elt.rel,
   };
@@ -260,18 +260,18 @@ export function extractHTMLIFrameElement(elt: HTMLIFrameElement) {
   return {
     ...extractHTMLElementBase(elt),
     allow: elt.allow,
-    allowFullscreen: elt.allowFullscreen,
+    allow_fullscreen: elt.allowFullscreen,
     height: elt.height,
     name: elt.name,
-    referrerPolicy: elt.referrerPolicy,
+    referrer_policy: elt.referrerPolicy,
     src: elt.src,
     srcdoc: elt.srcdoc,
     width: elt.width,
     align: elt.align,
-    frameBorder: elt.frameBorder,
-    longDesc: elt.longDesc,
-    marginHeight: elt.marginHeight,
-    marginWidth: elt.marginWidth,
+    frame_border: elt.frameBorder,
+    long_desc: elt.longDesc,
+    margin_height: elt.marginHeight,
+    margin_width: elt.marginWidth,
     scrolling: elt.scrolling,
     sandbox: elt.sandbox,
   };
@@ -281,30 +281,30 @@ export function extractHTMLImageElement(elt: HTMLImageElement) {
   return {
     ...extractHTMLElementBase(elt),
     alt: elt.alt,
-    crossOrigin: elt.crossOrigin,
+    cross_origin: elt.crossOrigin,
     decoding: elt.decoding,
     height: elt.height,
-    isMap: elt.isMap,
+    is_map: elt.isMap,
     loading: elt.loading,
-    naturalHeight: elt.naturalHeight,
-    naturalWidth: elt.naturalWidth,
-    referrerPolicy: elt.referrerPolicy,
+    natural_height: elt.naturalHeight,
+    natural_width: elt.naturalWidth,
+    referrer_policy: elt.referrerPolicy,
     sizes: elt.sizes,
     src: elt.src,
     srcset: elt.srcset,
-    useMap: elt.useMap,
+    use_map: elt.useMap,
     width: elt.width,
     align: elt.align,
     border: elt.border,
     complete: elt.complete,
     hspace: elt.hspace,
-    longDesc: elt.longDesc,
+    long_desc: elt.longDesc,
     lowsrc: elt.lowsrc,
     name: elt.name,
     vspace: elt.vspace,
     x: elt.x,
     y: elt.y,
-    fetchPriority: elt.fetchPriority,
+    fetch_priority: elt.fetchPriority,
   };
 }
 
@@ -315,50 +315,50 @@ export function extractHTMLInputElement(elt: HTMLInputElement) {
     alt: elt.alt,
     autocomplete: elt.autocomplete,
     checked: elt.checked,
-    defaultChecked: elt.defaultChecked,
-    defaultValue: elt.defaultValue,
-    dirName: elt.dirName,
+    default_checked: elt.defaultChecked,
+    default_value: elt.defaultValue,
+    dir_name: elt.dirName,
     disabled: elt.disabled,
     height: elt.height,
     indeterminate: elt.indeterminate,
     max: elt.max,
-    maxLength: elt.maxLength,
+    max_length: elt.maxLength,
     min: elt.min,
-    minLength: elt.minLength,
+    min_length: elt.minLength,
     multiple: elt.multiple,
     name: elt.name,
     pattern: elt.pattern,
     placeholder: elt.placeholder,
-    readOnly: elt.readOnly,
+    read_only: elt.readOnly,
     required: elt.required,
-    selectionDirection: elt.selectionDirection,
-    selectionEnd: elt.selectionEnd,
-    selectionStart: elt.selectionStart,
+    selection_direction: elt.selectionDirection,
+    selection_end: elt.selectionEnd,
+    selection_start: elt.selectionStart,
     size: elt.size,
     src: elt.src,
     step: elt.step,
     type: elt.type,
     value: elt.value,
-    valueAsNumber: elt.valueAsNumber,
+    value_as_number: elt.valueAsNumber,
     width: elt.width,
     align: elt.align,
     capture: elt.capture,
-    formAction: elt.formAction,
-    formEnctype: elt.formEnctype,
-    formMethod: elt.formMethod,
-    formNoValidate: elt.formNoValidate,
-    formTarget: elt.formTarget,
-    useMap: elt.useMap,
-    validationMessage: elt.validationMessage,
-    willValidate: elt.willValidate,
-    popoverTargetAction: elt.popoverTargetAction,
+    form_action: elt.formAction,
+    form_enctype: elt.formEnctype,
+    form_method: elt.formMethod,
+    form_no_validate: elt.formNoValidate,
+    form_target: elt.formTarget,
+    use_map: elt.useMap,
+    validation_message: elt.validationMessage,
+    will_validate: elt.willValidate,
+    popover_target_action: elt.popoverTargetAction,
   };
 }
 
 export function extractHTMLLabelElement(elt: HTMLLabelElement) {
   return {
     ...extractHTMLElementBase(elt),
-    htmlFor: elt.htmlFor,
+    html_for: elt.htmlFor,
   };
 }
 
@@ -374,16 +374,16 @@ export function extractHTMLLinkElement(elt: HTMLLinkElement) {
   return {
     ...extractHTMLElementBase(elt),
     as: elt.as,
-    crossOrigin: elt.crossOrigin,
+    cross_origin: elt.crossOrigin,
     disabled: elt.disabled,
-    fetchPriority: elt.fetchPriority,
+    fetch_priority: elt.fetchPriority,
     href: elt.href,
-    hreflang: elt.hreflang,
-    imageSizes: elt.imageSizes,
-    imageSrcset: elt.imageSrcset,
+    href_lang: elt.hreflang,
+    image_sizes: elt.imageSizes,
+    image_srcset: elt.imageSrcset,
     integrity: elt.integrity,
     media: elt.media,
-    referrerPolicy: elt.referrerPolicy,
+    referrer_policy: elt.referrerPolicy,
     rel: elt.rel,
     type: elt.type,
     charset: elt.charset,
@@ -437,16 +437,16 @@ export function extractHTMLObjectElement(elt: HTMLObjectElement) {
     height: elt.height,
     name: elt.name,
     type: elt.type,
-    useMap: elt.useMap,
+    use_map: elt.useMap,
     width: elt.width,
-    validationMessage: elt.validationMessage,
-    willValidate: elt.willValidate,
+    validation_message: elt.validationMessage,
+    will_validate: elt.willValidate,
     align: elt.align,
     archive: elt.archive,
     border: elt.border,
     code: elt.code,
-    codeBase: elt.codeBase,
-    codeType: elt.codeType,
+    code_base: elt.codeBase,
+    code_type: elt.codeType,
     declare: elt.declare,
     hspace: elt.hspace,
     standby: elt.standby,
@@ -465,7 +465,7 @@ export function extractHTMLOptGroupElement(elt: HTMLOptGroupElement) {
 export function extractHTMLOptionElement(elt: HTMLOptionElement) {
   return {
     ...extractHTMLElementBase(elt),
-    defaultSelected: elt.defaultSelected,
+    default_selected: elt.defaultSelected,
     disabled: elt.disabled,
     index: elt.index,
     label: elt.label,
@@ -478,13 +478,13 @@ export function extractHTMLOptionElement(elt: HTMLOptionElement) {
 export function extractHTMLOutputElement(elt: HTMLOutputElement) {
   return {
     ...extractHTMLElementBase(elt),
-    defaultValue: elt.defaultValue,
+    default_value: elt.defaultValue,
     name: elt.name,
     type: elt.type,
     value: elt.value,
-    htmlFor: elt.htmlFor,
-    validationMessage: elt.validationMessage,
-    willValidate: elt.willValidate,
+    html_for: elt.htmlFor,
+    validation_message: elt.validationMessage,
+    will_validate: elt.willValidate,
   };
 }
 
@@ -513,13 +513,13 @@ export function extractHTMLCiteElement(elt: HTMLElement) {
 export function extractHTMLScriptElement(elt: HTMLScriptElement) {
   return {
     ...extractHTMLElementBase(elt),
-    async: elt.async,
-    crossOrigin: elt.crossOrigin,
+    async_: elt.async,
+    cross_origin: elt.crossOrigin,
     defer: elt.defer,
-    fetchPriority: elt.fetchPriority,
+    fetch_priority: elt.fetchPriority,
     integrity: elt.integrity,
-    noModule: elt.noModule,
-    referrerPolicy: elt.referrerPolicy,
+    no_module: elt.noModule,
+    referrer_policy: elt.referrerPolicy,
     src: elt.src,
     text: elt.text,
     type: elt.type,
@@ -536,12 +536,12 @@ export function extractHTMLSelectElement(elt: HTMLSelectElement) {
     multiple: elt.multiple,
     name: elt.name,
     required: elt.required,
-    selectedIndex: elt.selectedIndex,
+    selected_index: elt.selectedIndex,
     size: elt.size,
     type: elt.type,
     value: elt.value,
-    validationMessage: elt.validationMessage,
-    willValidate: elt.willValidate,
+    validation_message: elt.validationMessage,
+    will_validate: elt.willValidate,
   };
 }
 
@@ -576,19 +576,19 @@ export function extractHTMLTableCellElement(elt: HTMLTableCellElement) {
   return {
     ...extractHTMLElementBase(elt),
     abbr: elt.abbr,
-    cellIndex: elt.cellIndex,
-    colSpan: elt.colSpan,
+    cell_index: elt.cellIndex,
+    col_span: elt.colSpan,
     headers: elt.headers,
-    rowSpan: elt.rowSpan,
+    row_span: elt.rowSpan,
     scope: elt.scope,
     align: elt.align,
     axis: elt.axis,
-    bgColor: elt.bgColor,
+    bg_color: elt.bgColor,
     ch: elt.ch,
-    chOff: elt.chOff,
+    ch_off: elt.chOff,
     height: elt.height,
-    noWrap: elt.noWrap,
-    vAlign: elt.vAlign,
+    no_wrap: elt.noWrap,
+    v_align: elt.vAlign,
     width: elt.width,
   };
 }
@@ -599,8 +599,8 @@ export function extractHTMLTableColElement(elt: HTMLTableColElement) {
     span: elt.span,
     align: elt.align,
     ch: elt.ch,
-    chOff: elt.chOff,
-    vAlign: elt.vAlign,
+    ch_off: elt.chOff,
+    v_align: elt.vAlign,
     width: elt.width,
   };
 }
@@ -609,10 +609,10 @@ export function extractHTMLTableElement(elt: HTMLTableElement) {
   return {
     ...extractHTMLElementBase(elt),
     align: elt.align,
-    bgColor: elt.bgColor,
+    bg_color: elt.bgColor,
     border: elt.border,
-    cellPadding: elt.cellPadding,
-    cellSpacing: elt.cellSpacing,
+    cell_padding: elt.cellPadding,
+    cell_spacing: elt.cellSpacing,
     frame: elt.frame,
     rules: elt.rules,
     summary: elt.summary,
@@ -623,13 +623,13 @@ export function extractHTMLTableElement(elt: HTMLTableElement) {
 export function extractHTMLTableRowElement(elt: HTMLTableRowElement) {
   return {
     ...extractHTMLElementBase(elt),
-    rowIndex: elt.rowIndex,
-    sectionRowIndex: elt.sectionRowIndex,
+    row_index: elt.rowIndex,
+    section_row_index: elt.sectionRowIndex,
     align: elt.align,
-    bgColor: elt.bgColor,
+    bg_color: elt.bgColor,
     ch: elt.ch,
-    chOff: elt.chOff,
-    vAlign: elt.vAlign,
+    ch_off: elt.chOff,
+    v_align: elt.vAlign,
   };
 }
 
@@ -638,8 +638,8 @@ export function extractHTMLTableSectionElement(elt: HTMLTableSectionElement) {
     ...extractHTMLElementBase(elt),
     align: elt.align,
     ch: elt.ch,
-    chOff: elt.chOff,
-    vAlign: elt.vAlign,
+    ch_off: elt.chOff,
+    v_align: elt.vAlign,
   };
 }
 
@@ -654,31 +654,31 @@ export function extractHTMLTextAreaElement(elt: HTMLTextAreaElement) {
     ...extractHTMLElementBase(elt),
     autocomplete: elt.autocomplete,
     cols: elt.cols,
-    defaultValue: elt.defaultValue,
-    dirName: elt.dirName,
+    default_value: elt.defaultValue,
+    dir_name: elt.dirName,
     disabled: elt.disabled,
-    maxLength: elt.maxLength,
-    minLength: elt.minLength,
+    max_length: elt.maxLength,
+    min_length: elt.minLength,
     name: elt.name,
     placeholder: elt.placeholder,
-    readOnly: elt.readOnly,
+    read_only: elt.readOnly,
     required: elt.required,
     rows: elt.rows,
-    selectionDirection: elt.selectionDirection,
-    selectionEnd: elt.selectionEnd,
-    selectionStart: elt.selectionStart,
+    selection_direction: elt.selectionDirection,
+    selection_end: elt.selectionEnd,
+    selection_start: elt.selectionStart,
     value: elt.value,
     wrap: elt.wrap,
-    textLength: elt.textLength,
-    validationMessage: elt.validationMessage,
-    willValidate: elt.willValidate,
+    text_length: elt.textLength,
+    validation_message: elt.validationMessage,
+    will_validate: elt.willValidate,
   };
 }
 
 export function extractHTMLTimeElement(elt: HTMLTimeElement) {
   return {
     ...extractHTMLElementBase(elt),
-    dateTime: elt.dateTime,
+    datetime: elt.dateTime,
   };
 }
 
@@ -688,7 +688,7 @@ export function extractHTMLTrackElement(elt: HTMLTrackElement) {
     default: elt.default,
     kind: elt.kind,
     label: elt.label,
-    readyState: elt.readyState,
+    ready_state: elt.readyState,
     src: elt.src,
     srclang: elt.srclang,
   };
@@ -699,10 +699,10 @@ export function extractHTMLVideoElement(elt: HTMLVideoElement) {
     ...extractHTMLMediaElement(elt),
     height: elt.height,
     poster: elt.poster,
-    videoHeight: elt.videoHeight,
-    videoWidth: elt.videoWidth,
+    video_height: elt.videoHeight,
+    video_width: elt.videoWidth,
     width: elt.width,
-    playsInline: elt.playsInline,
+    plays_inline: elt.playsInline,
   };
 }
 
@@ -724,12 +724,12 @@ export function extractHTMLBaseElement(elt: HTMLBaseElement) {
 export function extractHTMLBodyElement(elt: HTMLBodyElement) {
   return {
     ...extractHTMLElementBase(elt),
-    aLink: elt.aLink,
+    a_link: elt.aLink,
     background: elt.background,
-    bgColor: elt.bgColor,
+    bg_color: elt.bgColor,
     link: elt.link,
     text: elt.text,
-    vLink: elt.vLink,
+    v_link: elt.vLink,
   };
 }
 
@@ -751,7 +751,7 @@ export function extractHTMLDialogElement(elt: HTMLDialogElement) {
   return {
     ...extractHTMLElementBase(elt),
     open: elt.open,
-    returnValue: elt.returnValue,
+    return_value: elt.returnValue,
   };
 }
 
@@ -780,7 +780,7 @@ export function extractHTMLHRElement(elt: HTMLHRElement) {
     ...extractHTMLElementBase(elt),
     align: elt.align,
     color: elt.color,
-    noShade: elt.noShade,
+    no_shade: elt.noShade,
     size: elt.size,
     width: elt.width,
   };
@@ -803,7 +803,7 @@ export function extractHTMLMetaElement(elt: HTMLMetaElement) {
   return {
     ...extractHTMLElementBase(elt),
     content: elt.content,
-    httpEquiv: elt.httpEquiv,
+    http_equiv: elt.httpEquiv,
     name: elt.name,
     scheme: elt.scheme,
   };
@@ -1006,7 +1006,8 @@ export function extractHTMLElement(elt: HTMLElement): object {
 
 export function extractSyntheticEvent(evt: React.SyntheticEvent) {
   return {
-    nativeEvent: cleanForSerialization(evt.nativeEvent),
+    // Very slow right now, to investigate
+    // nativeEvent: cleanForSerialization(evt.nativeEvent),
     // use extractHTMLElement in every place where a HTMLElement or generic TElement type is used
     target: extractHTMLElement(evt.target as HTMLElement), // I think this is true for all or purposes
     // currentTarget is often not available in Reflex event handlers
@@ -1025,27 +1026,30 @@ export function extractUIEvent(evt: React.UIEvent) {
 }
 
 export function extractMouseEvent(evt: React.MouseEvent) {
-  return {
+  const result = {
     ...extractUIEvent(evt),
 
-    altKey: evt.altKey,
+    alt_key: evt.altKey,
     button: evt.button,
     buttons: evt.buttons,
-    clientX: evt.clientX,
-    clientY: evt.clientY,
-    ctrlKey: evt.ctrlKey,
-    metaKey: evt.metaKey,
-    movementX: evt.movementX,
-    movementY: evt.movementY,
-    pageX: evt.pageX,
-    pageY: evt.pageY,
-    relatedTarget: evt.relatedTarget
+    client_x: evt.clientX,
+    client_y: evt.clientY,
+    ctrl_key: evt.ctrlKey,
+    meta_key: evt.metaKey,
+    movement_x: evt.movementX,
+    movement_y: evt.movementY,
+    page_x: evt.pageX,
+    page_y: evt.pageY,
+    related_target: evt.relatedTarget
       ? extractHTMLElement(evt.relatedTarget as HTMLElement)
       : null,
-    screenX: evt.screenX,
-    screenY: evt.screenY,
-    shiftKey: evt.shiftKey,
+    screen_x: evt.screenX,
+    screen_y: evt.screenY,
+    shift_key: evt.shiftKey,
   };
+
+  console.log("Mouse event:", result)
+  return result
 }
 
 export function extractClipboardEvent(evt: React.ClipboardEvent) {
@@ -1088,7 +1092,7 @@ export function extractPointerEvent(evt: React.PointerEvent) {
 export function extractFocusEvent(evt: React.FocusEvent) {
   return {
     ...extractSyntheticEvent(evt),
-    target: extractHTMLElement(evt.target as HTMLElement),
+    // target: extractHTMLElement(evt.target as HTMLElement),
     related_target: evt.relatedTarget
       ? extractHTMLElement(evt.relatedTarget as HTMLElement)
       : null,
