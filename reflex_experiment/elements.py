@@ -472,7 +472,7 @@ class HTMLObjectElement(HTMLElementBase):
     tag_name: Literal["object"]
 
     data: str
-    disabled: bool
+    # disabled: bool
     height: str
     name: str
     type: str
@@ -683,7 +683,7 @@ class HTMLTableElement(HTMLElementBase):
 
     tag_name: Literal["table"]
 
-    caption: Optional[HTMLTableCaptionElement]  # Reference, might be tricky
+    # caption: Optional[HTMLTableCaptionElement]  # Reference, might be tricky
     # t_head: Optional[HTMLTableSectionElement] # Reference
     # t_foot: Optional[HTMLTableSectionElement] # Reference
     # t_bodies: HTMLCollection # Cannot serialize

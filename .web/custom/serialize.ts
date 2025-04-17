@@ -434,6 +434,7 @@ export function extractHTMLObjectElement(elt: HTMLObjectElement) {
   return {
     ...extractHTMLElementBase(elt),
     data: elt.data,
+    // disabled: elt.disabled,
     height: elt.height,
     name: elt.name,
     type: elt.type,
@@ -524,6 +525,8 @@ export function extractHTMLScriptElement(elt: HTMLScriptElement) {
     text: elt.text,
     type: elt.type,
     charset: elt.charset,
+    event: (elt as any).event,
+    html_for: (elt as any).htmlFor,
   };
 }
 
@@ -608,6 +611,7 @@ export function extractHTMLTableColElement(elt: HTMLTableColElement) {
 export function extractHTMLTableElement(elt: HTMLTableElement) {
   return {
     ...extractHTMLElementBase(elt),
+    // caption: elt.caption ? extractHTMLTableCaptionElement(elt.caption) : null,
     align: elt.align,
     bg_color: elt.bgColor,
     border: elt.border,
@@ -1026,7 +1030,7 @@ export function extractUIEvent(evt: React.UIEvent) {
 }
 
 export function extractMouseEvent(evt: React.MouseEvent) {
-  const result = {
+  return {
     ...extractUIEvent(evt),
 
     alt_key: evt.altKey,
@@ -1047,15 +1051,12 @@ export function extractMouseEvent(evt: React.MouseEvent) {
     screen_y: evt.screenY,
     shift_key: evt.shiftKey,
   };
-
-  console.log("Mouse event:", result)
-  return result
 }
 
 export function extractClipboardEvent(evt: React.ClipboardEvent) {
   return {
     ...extractSyntheticEvent(evt),
-    clipboard_data: evt.clipboardData,
+    clipboard_data: extractDataTransfer(evt.clipboardData),
   };
 }
 
@@ -1069,7 +1070,7 @@ export function extractCompositionEvent(evt: React.CompositionEvent) {
 export function extractDragEvent(evt: React.DragEvent) {
   return {
     ...extractMouseEvent(evt),
-    data_transfer: evt.dataTransfer,
+    data_transfer: extractDataTransfer(evt.dataTransfer),
   };
 }
 
@@ -1104,7 +1105,7 @@ export function extractFormEvent(evt: React.FormEvent) {
 }
 
 export function extractInvalidEvent(evt: React.InvalidEvent) {
-  return extractSyntheticEvent(evt)
+  return extractSyntheticEvent(evt);
 }
 
 export function extractChangeEvent(evt: React.ChangeEvent) {
@@ -1199,5 +1200,28 @@ export function extractTransitionEvent(evt: React.TransitionEvent) {
     elapsed_time: evt.elapsedTime,
     property_name: evt.propertyName,
     pseudo_element: evt.pseudoElement,
+  };
+}
+
+// Helper function to extract DataTransfer properties
+function extractDataTransfer(dt: DataTransfer | null): object | null {
+  if (!dt) {
+    return null;
+  }
+  const items = [];
+  if (dt.items) {
+    for (let i = 0; i < dt.items.length; i++) {
+      const item = dt.items[i];
+      items.push({
+        kind: item.kind,
+        type: item.type,
+      });
+    }
+  }
+  return {
+    drop_effect: dt.dropEffect,
+    effect_allowed: dt.effectAllowed,
+    items: items,
+    types: Array.from(dt.types || []),
   };
 }

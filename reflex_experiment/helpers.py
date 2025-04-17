@@ -220,3 +220,15 @@ def create_event_handler(event, element):
         return (result,)
 
     return handler
+
+
+class TypedEventHandler:
+    "Helper class to define a pass-through event handler in Reflex with proper return type annotations"
+    @classmethod
+    def __class_getitem__(cls, *t_args: type):
+        return_type = tuple[*(rx.Var[t] for t in t_args)] # type: ignore
+
+        def handler(*args) -> return_type: # type: ignore
+            return args
+
+        return handler

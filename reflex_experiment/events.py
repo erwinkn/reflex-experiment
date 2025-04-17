@@ -252,7 +252,7 @@ def build_event_operation(fn: str):
 TType = TypeVar("TType", bound=type)
 
 
-def make_handler(fn: str, return_type: TType):  # type: ignore
+def make_event_handler(fn: str, return_type: TType):  # type: ignore
     op = build_event_operation(fn)
 
     def handle_event(var: rx.Var) -> tuple[rx.Var[return_type]]:
@@ -265,28 +265,28 @@ class DOMEvents:
     @classmethod
     @cache
     def __class_getitem__(cls, t_element: type[TElement]):
-        generic_handler = make_handler("SyntheticEvent", SyntheticEvent[t_element])
-        ui_handler = make_handler("UIEvent", UIEvent[t_element])
-        clipboard_handler = make_handler("ClipboardEvent", ClipboardEvent[t_element])
-        composition_handler = make_handler(
+        generic_handler = make_event_handler("SyntheticEvent", SyntheticEvent[t_element])
+        ui_handler = make_event_handler("UIEvent", UIEvent[t_element])
+        clipboard_handler = make_event_handler("ClipboardEvent", ClipboardEvent[t_element])
+        composition_handler = make_event_handler(
             "CompositionEvent", CompositionEvent[t_element]
         )
-        drag_handler = make_handler("DragEvent", DragEvent[t_element])
-        pointer_handler = make_handler("PointerEvent", PointerEvent[t_element])
-        focus_handler = make_handler("FocusEvent", FocusEvent[t_element])
-        form_handler = make_handler("FormEvent", FormEvent[t_element])
-        keyboard_handler = make_handler("KeyboardEvent", KeyboardEvent[t_element])
-        mouse_handler = make_handler("MouseEvent", MouseEvent[t_element])
-        touch_handler = make_handler("TouchEvent", TouchEvent[t_element])
-        wheel_handler = make_handler("WheelEvent", WheelEvent[t_element])
-        animation_handler = make_handler("AnimationEvent", AnimationEvent[t_element])
-        toggle_handler = make_handler("ToggleEvent", ToggleEvent[t_element])
-        transition_handler = make_handler("TransitionEvent", TransitionEvent[t_element])
+        drag_handler = make_event_handler("DragEvent", DragEvent[t_element])
+        pointer_handler = make_event_handler("PointerEvent", PointerEvent[t_element])
+        focus_handler = make_event_handler("FocusEvent", FocusEvent[t_element])
+        form_handler = make_event_handler("FormEvent", FormEvent[t_element])
+        keyboard_handler = make_event_handler("KeyboardEvent", KeyboardEvent[t_element])
+        mouse_handler = make_event_handler("MouseEvent", MouseEvent[t_element])
+        touch_handler = make_event_handler("TouchEvent", TouchEvent[t_element])
+        wheel_handler = make_event_handler("WheelEvent", WheelEvent[t_element])
+        animation_handler = make_event_handler("AnimationEvent", AnimationEvent[t_element])
+        toggle_handler = make_event_handler("ToggleEvent", ToggleEvent[t_element])
+        transition_handler = make_event_handler("TransitionEvent", TransitionEvent[t_element])
         # More specific type for these three elements, where `target` is always the element itself
         if t_element in (HTMLInputElement, HTMLTextAreaElement, HTMLSelectElement):
-            change_handler = make_handler("ChangeEvent", ChangeEvent[t_element])
+            change_handler = make_event_handler("ChangeEvent", ChangeEvent[t_element])
         else:
-            change_handler = make_handler("FocusEvent", FocusEvent[t_element])
+            change_handler = make_event_handler("FocusEvent", FocusEvent[t_element])
 
         class DOMEventsMixin(ComponentBase):
             # Clipboard Events

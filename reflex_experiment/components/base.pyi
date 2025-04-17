@@ -7,6 +7,7 @@ from typing import (
     Sequence,
     overload,
 )
+from reflex.vars.base import Var
 import reflex as rx
 from reflex.utils import types
 
@@ -16,11 +17,14 @@ class ComponentBase(rx.Component):
     ) -> dict[str, types.ArgsSpec | Sequence[types.ArgsSpec]]: ...
     @overload
     @classmethod
-    def create(cls, *children, **props) -> "ComponentBase":  # type: ignore
+    def create(  # type: ignore
+        cls, *children, key: Var[str | None] | str | None = None, **props
+    ) -> "ComponentBase":
         """Create the component.
 
         Args:
             *children: The children of the component.
+            key: A unique key for the component.
             **props: The props of the component.
 
         Returns:

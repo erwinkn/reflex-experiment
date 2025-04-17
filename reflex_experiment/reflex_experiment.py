@@ -1,7 +1,7 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
 import reflex as rx
-from reflex_experiment.components.button import button
+from reflex_experiment.components.ui.button import button
 from reflex_experiment.elements import HTMLButtonElement
 from reflex_experiment.events import MouseEvent
 

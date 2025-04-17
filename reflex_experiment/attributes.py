@@ -1,6 +1,7 @@
 # Adapted from @types/react 19.0
 # NOT the same thing as the properties in `elements.py` (but very similar)
 from typing import Any, Dict, List, Literal, Union
+from pydantic.v1 import Field
 import reflex as rx
 
 from reflex_experiment.components.base import ComponentBase
@@ -62,7 +63,7 @@ CrossOrigin = Literal["anonymous", "use-credentials", ""] | None
 # Note: we're going to redefine certain vars already set on rx.Component, but
 # that will allow them to appear in the generated .pyi file with our custom
 # pyi_generator
-class HTMLAttributes(ComponentBase):
+class HTMLProps(ComponentBase):
     # React-specific Attributes
     default_checked: rx.Var[bool]
     default_value: rx.Var[Union[str, int, List[str]]]
@@ -75,7 +76,7 @@ class HTMLAttributes(ComponentBase):
         Literal["off", "none", "on", "sentences", "words", "characters"]
     ]
     auto_focus: rx.Var[bool]
-    class_name: rx.Var[str]  # type: ignore
+    class_name: rx.Var[str]  # type: ignore -> defined in rx.Component
     content_editable: rx.Var[Union[Booleanish, Literal["inherit", "plaintext-only"]]]
     context_menu: rx.Var[str]
     dir: rx.Var[str]
@@ -84,12 +85,14 @@ class HTMLAttributes(ComponentBase):
         Literal["enter", "done", "go", "next", "previous", "search", "send"]
     ]
     hidden: rx.Var[bool]
-    id: rx.Var[str]  # type: ignore
+    id: rx.Var[str]  # type: ignore -> defined in rx.Component
     lang: rx.Var[str]
     nonce: rx.Var[str]
     slot: rx.Var[str]
     spell_check: rx.Var[Booleanish]
-    style: rx.Var[Dict[str, Any]]  # type: ignore # CSSProperties
+    style: rx.Style = Field(
+        default_factory=rx.Style
+    )  # -> defined in rx.Component, reincluded as our pyi_generator ignores rx.Component props
     tab_index: rx.Var[int]
     title: rx.Var[str]
     translate: rx.Var[Literal["yes", "no"]]
@@ -161,7 +164,7 @@ HTMLAttributeReferrerPolicy = Literal[
 ]
 
 
-class HTMLAnchorProps(HTMLAttributes, DOMEvents[HTMLAnchorElement]):
+class HTMLAnchorProps(HTMLProps, DOMEvents[HTMLAnchorElement]):
     download: Any
     href: str
     href_lang: str
@@ -172,7 +175,7 @@ class HTMLAnchorProps(HTMLAttributes, DOMEvents[HTMLAnchorElement]):
     referrer_policy: HTMLAttributeReferrerPolicy
 
 
-class HTMLAreaProps(HTMLAttributes, DOMEvents[HTMLAreaElement]):
+class HTMLAreaProps(HTMLProps, DOMEvents[HTMLAreaElement]):
     alt: str
     coords: str
     download: Any
@@ -184,16 +187,16 @@ class HTMLAreaProps(HTMLAttributes, DOMEvents[HTMLAreaElement]):
     target: str
 
 
-class HTMLBaseProps(HTMLAttributes, DOMEvents[HTMLBaseElement]):
+class HTMLBaseProps(HTMLProps, DOMEvents[HTMLBaseElement]):
     href: str
     target: str
 
 
-class HTMLBlockquoteProps(HTMLAttributes, DOMEvents[HTMLQuoteElement]):
+class HTMLBlockquoteProps(HTMLProps, DOMEvents[HTMLQuoteElement]):
     cite: str
 
 
-class HTMLButtonProps(HTMLAttributes, DOMEvents[HTMLButtonElement]):
+class HTMLButtonProps(HTMLProps, DOMEvents[HTMLButtonElement]):
     disabled: rx.Var[bool]
     form: rx.Var[str]
     # NOTE: rx.Var[support form_action callbacks?]
@@ -207,52 +210,52 @@ class HTMLButtonProps(HTMLAttributes, DOMEvents[HTMLButtonElement]):
     value: rx.Var[Union[str, List[str], int]]
 
 
-class HTMLCanvasProps(HTMLAttributes, DOMEvents[HTMLElementBase]):
+class HTMLCanvasProps(HTMLProps, DOMEvents[HTMLElementBase]):
     height: Union[int, str]
     width: Union[int, str]
 
 
-class HTMLColProps(HTMLAttributes, DOMEvents[HTMLTableColElement]):
+class HTMLColProps(HTMLProps, DOMEvents[HTMLTableColElement]):
     span: int
     width: Union[int, str]
 
 
-class HTMLColgroupProps(HTMLAttributes, DOMEvents[HTMLTableColElement]):
+class HTMLColgroupProps(HTMLProps, DOMEvents[HTMLTableColElement]):
     span: int
 
 
-class HTMLDataProps(HTMLAttributes, DOMEvents[HTMLDataElement]):
+class HTMLDataProps(HTMLProps, DOMEvents[HTMLDataElement]):
     value: Union[str, List[str], int]
 
 
-class HTMLDetailsProps(HTMLAttributes, DOMEvents[HTMLDetailsElement]):
+class HTMLDetailsProps(HTMLProps, DOMEvents[HTMLDetailsElement]):
     open: bool
     name: str
 
 
-class HTMLDelProps(HTMLAttributes, DOMEvents[HTMLModElement]):
+class HTMLDelProps(HTMLProps, DOMEvents[HTMLModElement]):
     cite: str
     date_time: str
 
 
-class HTMLDialogProps(HTMLAttributes, DOMEvents[HTMLDialogElement]):
+class HTMLDialogProps(HTMLProps, DOMEvents[HTMLDialogElement]):
     open: bool
 
 
-class HTMLEmbedProps(HTMLAttributes, DOMEvents[HTMLEmbedElement]):
+class HTMLEmbedProps(HTMLProps, DOMEvents[HTMLEmbedElement]):
     height: Union[int, str]
     src: str
     type: str
     width: Union[int, str]
 
 
-class HTMLFieldsetProps(HTMLAttributes, DOMEvents[HTMLFieldSetElement]):
+class HTMLFieldsetProps(HTMLProps, DOMEvents[HTMLFieldSetElement]):
     disabled: bool
     form: str
     name: str
 
 
-class HTMLFormProps(HTMLAttributes, DOMEvents[HTMLFormElement]):
+class HTMLFormProps(HTMLProps, DOMEvents[HTMLFormElement]):
     accept_charset: str
     # NOTE: support action callbacks?
     action: str
@@ -264,11 +267,11 @@ class HTMLFormProps(HTMLAttributes, DOMEvents[HTMLFormElement]):
     target: str
 
 
-class HTMLHtmlProps(HTMLAttributes, DOMEvents[HTMLHtmlElement]):
+class HTMLHtmlProps(HTMLProps, DOMEvents[HTMLHtmlElement]):
     manifest: str
 
 
-class HTMLIframeProps(HTMLAttributes, DOMEvents[HTMLIFrameElement]):
+class HTMLIframeProps(HTMLProps, DOMEvents[HTMLIFrameElement]):
     allow: str
     allow_full_screen: bool
     allow_transparency: bool
@@ -287,7 +290,7 @@ class HTMLIframeProps(HTMLAttributes, DOMEvents[HTMLIFrameElement]):
     width: Union[int, str]
 
 
-class HTMLImgProps(HTMLAttributes, DOMEvents[HTMLImageElement]):
+class HTMLImgProps(HTMLProps, DOMEvents[HTMLImageElement]):
     alt: str
     cross_origin: CrossOrigin
     decoding: Literal["async", "auto", "sync"]
@@ -302,7 +305,7 @@ class HTMLImgProps(HTMLAttributes, DOMEvents[HTMLImageElement]):
     width: Union[int, str]
 
 
-class HTMLInsProps(HTMLAttributes, DOMEvents[HTMLModElement]):
+class HTMLInsProps(HTMLProps, DOMEvents[HTMLModElement]):
     cite: str
     date_time: str
 
@@ -336,7 +339,7 @@ HTMLInputType = (
 )
 
 
-class HTMLInputProps(HTMLAttributes, DOMEvents[HTMLInputElement]):
+class HTMLInputProps(HTMLProps, DOMEvents[HTMLInputElement]):
     accept: str
     alt: str
     auto_complete: str  # HTMLInputAutoCompleteAttribute
@@ -369,7 +372,7 @@ class HTMLInputProps(HTMLAttributes, DOMEvents[HTMLInputElement]):
     width: Union[int, str]
 
 
-class HTMLKeygenProps(HTMLAttributes, DOMEvents[HTMLElementBase]):
+class HTMLKeygenProps(HTMLProps, DOMEvents[HTMLElementBase]):
     challenge: str
     disabled: bool
     form: str
@@ -378,16 +381,16 @@ class HTMLKeygenProps(HTMLAttributes, DOMEvents[HTMLElementBase]):
     name: str
 
 
-class HTMLLabelProps(HTMLAttributes, DOMEvents[HTMLLabelElement]):
+class HTMLLabelProps(HTMLProps, DOMEvents[HTMLLabelElement]):
     form: str
     html_for: str
 
 
-class HTMLLiProps(HTMLAttributes, DOMEvents[HTMLLiElement]):
+class HTMLLiProps(HTMLProps, DOMEvents[HTMLLiElement]):
     value: Union[str, List[str], int]
 
 
-class HTMLLinkProps(HTMLAttributes, DOMEvents[HTMLLinkElement]):
+class HTMLLinkProps(HTMLProps, DOMEvents[HTMLLinkElement]):
     as_: str
     cross_origin: CrossOrigin
     fetch_priority: Literal["high", "low", "auto"]
@@ -404,15 +407,15 @@ class HTMLLinkProps(HTMLAttributes, DOMEvents[HTMLLinkElement]):
     precedence: str
 
 
-class HTMLMapProps(HTMLAttributes, DOMEvents[HTMLMapElement]):
+class HTMLMapProps(HTMLProps, DOMEvents[HTMLMapElement]):
     name: str
 
 
-class HTMLMenuProps(HTMLAttributes, DOMEvents[HTMLMenuElement]):
+class HTMLMenuProps(HTMLProps, DOMEvents[HTMLMenuElement]):
     type: str
 
 
-class HTMLMediaProps(HTMLAttributes, DOMEvents[HTMLMediaElement]):
+class HTMLMediaProps(HTMLProps, DOMEvents[HTMLMediaElement]):
     auto_play: bool
     controls: bool
     controls_list: str
@@ -430,7 +433,7 @@ class HTMLAudioProps(HTMLMediaProps, DOMEvents[HTMLAudioElement]):
     pass
 
 
-class HTMLMetaProps(HTMLAttributes, DOMEvents[HTMLMetaElement]):
+class HTMLMetaProps(HTMLProps, DOMEvents[HTMLMetaElement]):
     char_set: str
     content: str
     http_equiv: str
@@ -438,7 +441,7 @@ class HTMLMetaProps(HTMLAttributes, DOMEvents[HTMLMetaElement]):
     name: str
 
 
-class HTMLMeterProps(HTMLAttributes, DOMEvents[HTMLMeterElement]):
+class HTMLMeterProps(HTMLProps, DOMEvents[HTMLMeterElement]):
     form: str
     high: int
     low: int
@@ -448,11 +451,11 @@ class HTMLMeterProps(HTMLAttributes, DOMEvents[HTMLMeterElement]):
     value: Union[str, List[str], int]
 
 
-class HTMLQuoteProps(HTMLAttributes, DOMEvents[HTMLQuoteElement]):
+class HTMLQuoteProps(HTMLProps, DOMEvents[HTMLQuoteElement]):
     cite: str
 
 
-class HTMLObjectProps(HTMLAttributes, DOMEvents[HTMLObjectElement]):
+class HTMLObjectProps(HTMLProps, DOMEvents[HTMLObjectElement]):
     class_id: str
     data: str
     form: str
@@ -464,45 +467,45 @@ class HTMLObjectProps(HTMLAttributes, DOMEvents[HTMLObjectElement]):
     wmode: str
 
 
-class HTMLOlProps(HTMLAttributes, DOMEvents[HTMLOListElement]):
+class HTMLOlProps(HTMLProps, DOMEvents[HTMLOListElement]):
     reversed: bool
     start: int
     type: Literal["1", "a", "A", "i", "I"]
 
 
-class HTMLOptgroupProps(HTMLAttributes, DOMEvents[HTMLOptGroupElement]):
+class HTMLOptgroupProps(HTMLProps, DOMEvents[HTMLOptGroupElement]):
     disabled: bool
     label: str
 
 
-class HTMLOptionProps(HTMLAttributes, DOMEvents[HTMLOptionElement]):
+class HTMLOptionProps(HTMLProps, DOMEvents[HTMLOptionElement]):
     disabled: bool
     label: str
     selected: bool
     value: Union[str, List[str], int]
 
 
-class HTMLOutputProps(HTMLAttributes, DOMEvents[HTMLOutputElement]):
+class HTMLOutputProps(HTMLProps, DOMEvents[HTMLOutputElement]):
     form: str
     html_for: str
     name: str
 
 
-class HTMLParamProps(HTMLAttributes, DOMEvents[HTMLElementBase]):
+class HTMLParamProps(HTMLProps, DOMEvents[HTMLElementBase]):
     name: str
     value: Union[str, List[str], int]
 
 
-class HTMLProgressProps(HTMLAttributes, DOMEvents[HTMLProgressElement]):
+class HTMLProgressProps(HTMLProps, DOMEvents[HTMLProgressElement]):
     max: Union[int, str]
     value: Union[str, List[str], int]
 
 
-class HTMLSlotProps(HTMLAttributes, DOMEvents[HTMLSlotElement]):
+class HTMLSlotProps(HTMLProps, DOMEvents[HTMLSlotElement]):
     name: str
 
 
-class HTMLScriptProps(HTMLAttributes, DOMEvents[HTMLScriptElement]):
+class HTMLScriptProps(HTMLProps, DOMEvents[HTMLScriptElement]):
     async_: bool
     char_set: str  # deprecated
     cross_origin: CrossOrigin
@@ -514,7 +517,7 @@ class HTMLScriptProps(HTMLAttributes, DOMEvents[HTMLScriptElement]):
     type: str
 
 
-class HTMLSelectProps(HTMLAttributes, DOMEvents[HTMLSelectElement]):
+class HTMLSelectProps(HTMLProps, DOMEvents[HTMLSelectElement]):
     auto_complete: str
     disabled: bool
     form: str
@@ -525,7 +528,7 @@ class HTMLSelectProps(HTMLAttributes, DOMEvents[HTMLSelectElement]):
     value: Union[str, List[str], int]
 
 
-class HTMLSourceProps(HTMLAttributes, DOMEvents[HTMLSourceElement]):
+class HTMLSourceProps(HTMLProps, DOMEvents[HTMLSourceElement]):
     height: Union[int, str]
     media: str
     sizes: str
@@ -535,7 +538,7 @@ class HTMLSourceProps(HTMLAttributes, DOMEvents[HTMLSourceElement]):
     width: Union[int, str]
 
 
-class HTMLStyleProps(HTMLAttributes, DOMEvents[HTMLStyleElement]):
+class HTMLStyleProps(HTMLProps, DOMEvents[HTMLStyleElement]):
     media: str
     scoped: bool
     type: str
@@ -543,7 +546,7 @@ class HTMLStyleProps(HTMLAttributes, DOMEvents[HTMLStyleElement]):
     precedence: str
 
 
-class HTMLTableProps(HTMLAttributes, DOMEvents[HTMLTableElement]):
+class HTMLTableProps(HTMLProps, DOMEvents[HTMLTableElement]):
     align: Literal["left", "center", "right"]
     bgcolor: str
     border: int
@@ -555,7 +558,7 @@ class HTMLTableProps(HTMLAttributes, DOMEvents[HTMLTableElement]):
     width: Union[int, str]
 
 
-class HTMLTextareaProps(HTMLAttributes, DOMEvents[HTMLTextAreaElement]):
+class HTMLTextareaProps(HTMLProps, DOMEvents[HTMLTextAreaElement]):
     auto_complete: str
     cols: int
     dir_name: str
@@ -572,7 +575,7 @@ class HTMLTextareaProps(HTMLAttributes, DOMEvents[HTMLTextAreaElement]):
     wrap: str
 
 
-class HTMLTdProps(HTMLAttributes, DOMEvents[HTMLTableCellElement]):
+class HTMLTdProps(HTMLProps, DOMEvents[HTMLTableCellElement]):
     align: Literal["left", "center", "right", "justify", "char"]
     col_span: int
     headers: str
@@ -584,7 +587,7 @@ class HTMLTdProps(HTMLAttributes, DOMEvents[HTMLTableCellElement]):
     valign: Literal["top", "middle", "bottom", "baseline"]
 
 
-class HTMLThProps(HTMLAttributes, DOMEvents[HTMLTableCellElement]):
+class HTMLThProps(HTMLProps, DOMEvents[HTMLTableCellElement]):
     align: Literal["left", "center", "right", "justify", "char"]
     col_span: int
     headers: str
@@ -593,11 +596,11 @@ class HTMLThProps(HTMLAttributes, DOMEvents[HTMLTableCellElement]):
     abbr: str
 
 
-class HTMLTimeProps(HTMLAttributes, DOMEvents[HTMLTimeElement]):
+class HTMLTimeProps(HTMLProps, DOMEvents[HTMLTimeElement]):
     date_time: str
 
 
-class HTMLTrackProps(HTMLAttributes, DOMEvents[HTMLTrackElement]):
+class HTMLTrackProps(HTMLProps, DOMEvents[HTMLTrackElement]):
     default: bool
     kind: str
     label: str
@@ -902,7 +905,7 @@ class SVGAttributes(ComponentBase):
     zoom_and_pan: str
 
 
-class WebViewAttributes(HTMLAttributes):
+class WebViewAttributes(HTMLProps):
     allow_full_screen: bool
     allowpopups: bool
     autosize: bool
