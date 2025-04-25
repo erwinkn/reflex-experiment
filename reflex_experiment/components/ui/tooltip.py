@@ -1,78 +1,62 @@
 from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLButtonProps, HTMLProps
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class Tooltip(rx.Component, GlobalAttributes):
+class TooltipRoot(HTMLProps):
     """A tooltip component based on shadcn/ui."""
 
     library = "$/custom/shadcn/tooltip"
     tag = "Tooltip"
 
     # Tooltip specific props
-    defaultOpen: rx.Var[bool] = rx.Var.create(False)
-    open: rx.Var[bool] = rx.Var.create(False)
-    onOpenChange: rx.EventHandler[lambda open: [open]]
-    delayDuration: rx.Var[int] = rx.Var.create(700)
-    disableHoverableContent: rx.Var[bool] = rx.Var.create(False)
+    default_open: rx.Var[bool]
+    open: rx.Var[bool]
+    on_open_change: TypedEventHandler[bool]
+    delay_duration: rx.Var[int]
+    disable_hoverable_content: rx.Var[bool]
 
 
-class TooltipTrigger(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class TooltipTrigger(HTMLButtonProps):
     """The trigger for a tooltip."""
 
     library = "$/custom/shadcn/tooltip"
     tag = "TooltipTrigger"
 
     # TooltipTrigger specific props
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    as_child: rx.Var[bool]
 
 
-class TooltipContent(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class TooltipContent(HTMLProps):
     """The content of a tooltip."""
 
     library = "$/custom/shadcn/tooltip"
     tag = "TooltipContent"
 
     # TooltipContent specific props
-    side: rx.Var[Literal["top", "right", "bottom", "left"]] = rx.Var.create("top")
-    sideOffset: rx.Var[int] = rx.Var.create(4)
-    align: rx.Var[Literal["start", "center", "end"]] = rx.Var.create("center")
-    alignOffset: rx.Var[int] = rx.Var.create(0)
-    avoidCollisions: rx.Var[bool] = rx.Var.create(True)
-    sticky: rx.Var[Literal["partial", "always"]] = rx.Var.create("partial")
-    hideWhenDetached: rx.Var[bool] = rx.Var.create(False)
+    side: rx.Var[Literal["top", "right", "bottom", "left"]]
+    side_offset: rx.Var[int]
+    align: rx.Var[Literal["start", "center", "end"]]
+    align_offset: rx.Var[int]
+    avoid_collisions: rx.Var[bool]
+    sticky: rx.Var[Literal["partial", "always"]]
+    hide_when_detached: rx.Var[bool]
 
 
-# Create helper functions
+class TooltipNamespace(rx.ComponentNamespace):
+    root = staticmethod(TooltipRoot.create)
+    trigger = staticmethod(TooltipTrigger.create)
+    content = staticmethod(TooltipContent.create)
 
 
-def tooltip(*children, **props):
-    """Create a Tooltip component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Tooltip.create(*children, **updated_props)
-
-
-def tooltip_trigger(*children, **props):
-    """Create a TooltipTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return TooltipTrigger.create(*children, **updated_props)
-
-
-def tooltip_content(*children, **props):
-    """Create a TooltipContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return TooltipContent.create(*children, **updated_props)
+tooltip = TooltipNamespace()
 
 
 __all__ = [
-    "Tooltip",
-    "tooltip",
+    "TooltipRoot",
     "TooltipTrigger",
-    "tooltip_trigger",
     "TooltipContent",
-    "tooltip_content",
+    "tooltip",
+    "TooltipNamespace",
 ]

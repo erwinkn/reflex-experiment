@@ -1,9 +1,11 @@
 import reflex as rx
-
 from reflex_experiment.attributes import HTMLButtonProps, HTMLProps
+from reflex_experiment.helpers import TypedEventHandler
+from reflex_experiment.events import FocusEvent, KeyboardEvent
+from reflex_experiment.elements import HTMLElement
 
 
-class AlertDialog(HTMLProps):
+class AlertDialogRoot(HTMLProps):
     """An alert dialog component."""
 
     library = "$/custom/shadcn/alert-dialog"
@@ -12,7 +14,7 @@ class AlertDialog(HTMLProps):
     # AlertDialog specific props
     default_open: rx.Var[bool]
     open: rx.Var[bool]
-    on_open_change: rx.EventHandler[lambda open: [open]]
+    on_open_change: TypedEventHandler[bool]
 
 
 class AlertDialogTrigger(HTMLProps):
@@ -49,7 +51,7 @@ class AlertDialogOverlay(HTMLProps):
     force_mount: rx.Var[bool]
 
 
-class AlertDialogContent( HTMLProps):
+class AlertDialogContent(HTMLProps):
     """The content of the alert dialog."""
 
     library = "$/custom/shadcn/alert-dialog"
@@ -58,9 +60,9 @@ class AlertDialogContent( HTMLProps):
     # AlertDialogContent specific props
     as_child: rx.Var[bool]
     force_mount: rx.Var[bool]
-    on_open_auto_focus: rx.EventHandler[lambda event: [event]]
-    on_close_auto_focus: rx.EventHandler[lambda event: [event]]
-    on_escape_key_down: rx.EventHandler[lambda event: [event]]
+    on_open_auto_focus: TypedEventHandler[FocusEvent[HTMLElement]]
+    on_close_auto_focus: TypedEventHandler[FocusEvent[HTMLElement]]
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
 
 
 class AlertDialogHeader(HTMLProps):
@@ -117,9 +119,8 @@ class AlertDialogCancel(HTMLButtonProps):
     as_child: rx.Var[bool]
 
 
-
 class AlertDialogNamespace(rx.ComponentNamespace):
-    root = staticmethod(AlertDialog.create)
+    root = staticmethod(AlertDialogRoot.create)
     trigger = staticmethod(AlertDialogTrigger.create)
     portal = staticmethod(AlertDialogPortal.create)
     overlay = staticmethod(AlertDialogOverlay.create)
@@ -136,16 +137,17 @@ alert_dialog = AlertDialogNamespace()
 
 
 __all__ = [
-    "AlertDialog",
-    "AlertDialogTrigger", 
+    "AlertDialogRoot",
+    "AlertDialogTrigger",
     "AlertDialogPortal",
     "AlertDialogOverlay",
     "AlertDialogContent",
     "AlertDialogHeader",
-    "AlertDialogFooter", 
+    "AlertDialogFooter",
     "AlertDialogTitle",
     "AlertDialogDescription",
     "AlertDialogAction",
     "AlertDialogCancel",
     "alert_dialog",
+    "AlertDialogNamespace",
 ]

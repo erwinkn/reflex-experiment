@@ -1,9 +1,9 @@
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import ButtonHTMLAttributes, HTMLAttributes
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class Collapsible(rx.Component, HTMLAttributes):
+class CollapsibleRoot(HTMLProps):
     """A collapsible component that can be opened and closed."""
 
     library = "$/custom/shadcn/collapsible"
@@ -13,11 +13,11 @@ class Collapsible(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
     default_open: rx.Var[bool]
     open: rx.Var[bool]
-    on_open_change: rx.EventHandler[lambda open: [open]]
+    on_open_change: TypedEventHandler[bool]
     disabled: rx.Var[bool]
 
 
-class CollapsibleTrigger(rx.Component, ButtonHTMLAttributes):
+class CollapsibleTrigger(HTMLButtonProps):
     """A button that triggers the collapsible component to open or close."""
 
     library = "$/custom/shadcn/collapsible"
@@ -27,7 +27,7 @@ class CollapsibleTrigger(rx.Component, ButtonHTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class CollapsibleContent(rx.Component, HTMLAttributes):
+class CollapsibleContent(HTMLProps):
     """The content of the collapsible component that gets shown or hidden."""
 
     library = "$/custom/shadcn/collapsible"
@@ -38,35 +38,19 @@ class CollapsibleContent(rx.Component, HTMLAttributes):
     force_mount: rx.Var[bool]
 
 
-# Create helper functions
+class CollapsibleNamespace(rx.ComponentNamespace):
+    root = staticmethod(CollapsibleRoot.create)
+    trigger = staticmethod(CollapsibleTrigger.create)
+    content = staticmethod(CollapsibleContent.create)
 
 
-def collapsible(*children, **props):
-    """Create a Collapsible component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Collapsible.create(*children, **updated_props)
-
-
-def collapsible_trigger(*children, **props):
-    """Create a CollapsibleTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CollapsibleTrigger.create(*children, **updated_props)
-
-
-def collapsible_content(*children, **props):
-    """Create a CollapsibleContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CollapsibleContent.create(*children, **updated_props)
+collapsible = CollapsibleNamespace()
 
 
 __all__ = [
-    "Collapsible",
-    "collapsible",
+    "CollapsibleRoot",
     "CollapsibleTrigger",
-    "collapsible_trigger",
     "CollapsibleContent",
-    "collapsible_content",
+    "collapsible",
+    "CollapsibleNamespace",
 ]

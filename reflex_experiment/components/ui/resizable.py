@@ -1,79 +1,83 @@
-from typing import List, Optional, Union, Dict, Any
+from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLProps
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class ResizablePanelGroup(rx.Component, GlobalAttributes):
+# Can be any element, depending on the tag_name prop
+class ResizablePanelGroup(HTMLProps):
     """A group of resizable panels."""
 
     library = "$/custom/shadcn/resizable"
     tag = "ResizablePanelGroup"
 
     # ResizablePanelGroup specific props
-    direction: rx.Var[str] = rx.Var.create("horizontal")
-    onLayout: rx.EventHandler[lambda sizes: [sizes]]
+    auto_save_id: rx.Var[str]
+    direction: rx.Var[Literal['horizontal', 'vertical']] = rx.Var.create("horizontal")
+    keyboard_resize_by: rx.Var[float]
+    # (layout: number[]) => void
+    on_layout: TypedEventHandler[list[float]]
+    # storage -> omitted, it's a way to pass callbacks
+    tag_name: str
 
 
-class ResizablePanel(rx.Component, GlobalAttributes):
+
+# Can be any element, depending on the tag_name prop
+class ResizablePanel(HTMLProps):
     """A resizable panel component."""
 
     library = "$/custom/shadcn/resizable"
     tag = "ResizablePanel"
 
     # ResizablePanel specific props
-    defaultSize: rx.Var[int] = rx.Var.create(0)
-    size: rx.Var[int] = rx.Var.create(0)
-    onResize: rx.EventHandler[lambda size: [size]]
-    minSize: rx.Var[int] = rx.Var.create(0)
-    maxSize: rx.Var[int] = rx.Var.create(100)
-    collapsible: rx.Var[bool] = rx.Var.create(False)
-    collapsedSize: rx.Var[int] = rx.Var.create(0)
-    className: rx.Var[str] = rx.Var.create("")
-    style: rx.Var[Dict[str, Any]] = rx.Var.create({})
+    collapsed_size: rx.Var[float]
+    collapsible: rx.Var[bool]
+    default_size: rx.Var[float]
+    max_size: rx.Var[float]
+    min_size: rx.Var[float]
+    on_collapse: TypedEventHandler[None]
+    on_expand: TypedEventHandler[None]
+    # (size: number, prevSize: number | undefined) => void
+    on_resize: TypedEventHandler[float, float | None]
+    order: rx.Var[float]
+    tag_name: str
 
 
-class ResizableHandle(rx.Component, GlobalAttributes):
+class PointerHitAreaMargins(rx.Base):
+    coarse: float
+    fine: float
+
+
+# Can be any element, depending on the tag_name prop
+class ResizableHandle(HTMLProps):
     """A handle for resizing panels."""
 
     library = "$/custom/shadcn/resizable"
     tag = "ResizableHandle"
 
     # ResizableHandle specific props
-    withHandle: rx.Var[bool] = rx.Var.create(False)
-    className: rx.Var[str] = rx.Var.create("")
-    style: rx.Var[Dict[str, Any]] = rx.Var.create({})
+    with_handle: rx.Var[bool]
+    hit_area_margins: rx.Var[PointerHitAreaMargins]
+
+    on_blur: TypedEventHandler[None]
+    on_dragging: TypedEventHandler[bool]  # (isDragging: boolean) => void
+    on_focus: TypedEventHandler[None]
+    tag_name: rx.Var[str]
 
 
-# Create helper functions
+class ResizableNamespace(rx.ComponentNamespace):
+    panel_group = staticmethod(ResizablePanelGroup.create)
+    panel = staticmethod(ResizablePanel.create)
+    handle = staticmethod(ResizableHandle.create)
 
 
-def resizable_panel_group(*children, **props):
-    """Create a ResizablePanelGroup component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ResizablePanelGroup.create(*children, **updated_props)
-
-
-def resizable_panel(*children, **props):
-    """Create a ResizablePanel component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ResizablePanel.create(*children, **updated_props)
-
-
-def resizable_handle(*children, **props):
-    """Create a ResizableHandle component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ResizableHandle.create(*children, **updated_props)
+resizable = ResizableNamespace()
 
 
 __all__ = [
     "ResizablePanelGroup",
-    "resizable_panel_group",
-    "ResizablePanel",
-    "resizable_panel",
+    "ResizablePanel", 
     "ResizableHandle",
-    "resizable_handle",
+    "resizable",
+    "ResizableNamespace",
 ]

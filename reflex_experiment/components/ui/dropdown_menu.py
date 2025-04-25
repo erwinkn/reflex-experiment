@@ -1,21 +1,24 @@
-from typing import Literal, TypedDict
+from typing import Literal, Optional, Union, Dict, List
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import ButtonHTMLAttributes, HTMLAttributes
-from reflex.components.radix.themes.base import RadixThemesComponent
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
+from reflex_experiment.helpers import TypedEventHandler
+from reflex_experiment.events import (
+    KeyboardEvent,
+    PointerEvent,
+    FocusEvent,
+    SyntheticEvent,
+)
+from reflex_experiment.elements import HTMLElement
 
 
-class Foo(TypedDict):
-    a: str
-    b: int
+class Padding(rx.Base):
+    top: Optional[float]
+    bottom: Optional[float]
+    left: Optional[float]
+    right: Optional[float]
 
-def test(**kwargs:Foo):
-    ...
 
-
-rx.button
-
-class DropdownMenu(rx.Component):
+class DropdownMenuRoot(HTMLProps):
     """A dropdown menu component based on shadcn/ui."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -24,11 +27,11 @@ class DropdownMenu(rx.Component):
     # DropdownMenu specific props
     default_open: rx.Var[bool]
     open: rx.Var[bool]
-    on_open_change: rx.EventHandler[lambda open: [open]]
+    on_open_change: TypedEventHandler[bool]
     modal: rx.Var[bool]
 
 
-class DropdownMenuTrigger(rx.Component, ButtonHTMLAttributes):
+class DropdownMenuTrigger(HTMLButtonProps):
     """A trigger for a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -37,7 +40,7 @@ class DropdownMenuTrigger(rx.Component, ButtonHTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class DropdownMenuGroup(rx.Component, HTMLAttributes):
+class DropdownMenuGroup(HTMLProps):
     """A group of dropdown menu items."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -46,7 +49,7 @@ class DropdownMenuGroup(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class DropdownMenuPortal(rx.Component):
+class DropdownMenuPortal(HTMLProps):
     """A portal for a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -58,7 +61,7 @@ class DropdownMenuPortal(rx.Component):
     container: rx.Var[str]
 
 
-class DropdownMenuSub(rx.Component):
+class DropdownMenuSub(HTMLProps):
     """A submenu within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -67,10 +70,10 @@ class DropdownMenuSub(rx.Component):
     # DropdownMenuSub specific props
     default_open: rx.Var[bool]
     open: rx.Var[bool]
-    on_open_change: rx.EventHandler[lambda open: [open]]
+    on_open_change: TypedEventHandler[bool]
 
 
-class DropdownMenuRadioGroup(rx.Component, HTMLAttributes):
+class DropdownMenuRadioGroup(HTMLProps):
     """A radio group within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -78,10 +81,10 @@ class DropdownMenuRadioGroup(rx.Component, HTMLAttributes):
 
     # DropdownMenuRadioGroup specific props
     value: rx.Var[str]
-    on_value_change: rx.EventHandler[lambda value: [value]]
+    on_value_change: TypedEventHandler[str]
 
 
-class DropdownMenuSubTrigger(rx.Component, HTMLAttributes):
+class DropdownMenuSubTrigger(HTMLProps):
     """A trigger for a dropdown submenu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -94,7 +97,7 @@ class DropdownMenuSubTrigger(rx.Component, HTMLAttributes):
     inset: rx.Var[bool]
 
 
-class DropdownMenuSubContent(rx.Component, HTMLAttributes):
+class DropdownMenuSubContent(HTMLProps):
     """The content of a dropdown submenu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -103,23 +106,22 @@ class DropdownMenuSubContent(rx.Component, HTMLAttributes):
     # DropdownMenuSubContent specific props
     as_child: rx.Var[bool]
     loop: rx.Var[bool]
-    on_escape_key_down: rx.EventHandler[lambda event: [event]]
-    on_pointer_down_outside: rx.EventHandler[lambda event: [event]]
-    on_focus_outside: rx.EventHandler[lambda event: [event]]
-    on_interact_outside: rx.EventHandler[lambda event: [event]]
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
+    on_pointer_down_outside: TypedEventHandler[PointerEvent[HTMLElement]]
+    on_focus_outside: TypedEventHandler[FocusEvent[HTMLElement]]
+    on_interact_outside: TypedEventHandler[SyntheticEvent[HTMLElement]]
     force_mount: rx.Var[bool]
     side_offset: rx.Var[int]
     align_offset: rx.Var[int]
     avoid_collisions: rx.Var[bool]
-    collision_boundary: rx.Var[list]
-    collision_padding: rx.Var[int | dict]
+    # collision_boundary: rx.Var[List]
+    collision_padding: rx.Var[int| Padding]
     arrow_padding: rx.Var[int]
     sticky: rx.Var[Literal["partial", "always"]]
     hide_when_detached: rx.Var[bool]
-    # TODO: data attributes
 
 
-class DropdownMenuContent(rx.Component, HTMLAttributes):
+class DropdownMenuContent(HTMLProps):
     """The content of a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -128,25 +130,25 @@ class DropdownMenuContent(rx.Component, HTMLAttributes):
     # DropdownMenuContent specific props
     as_child: rx.Var[bool]
     loop: rx.Var[bool]
-    on_close_auto_focus: rx.EventHandler[lambda event: [event]]
-    on_escape_key_down: rx.EventHandler[lambda event: [event]]
-    on_pointer_down_outside: rx.EventHandler[lambda event: [event]]
-    on_focus_outside: rx.EventHandler[lambda event: [event]]
-    on_interact_outside: rx.EventHandler[lambda event: [event]]
+    on_close_auto_focus: TypedEventHandler[FocusEvent[HTMLElement]]
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
+    on_pointer_down_outside: TypedEventHandler[PointerEvent[HTMLElement]]
+    on_focus_outside: TypedEventHandler[FocusEvent[HTMLElement]]
+    on_interact_outside: TypedEventHandler[SyntheticEvent[HTMLElement]]
     force_mount: rx.Var[bool]
     side: rx.Var[Literal["top", "right", "bottom", "left"]]
     side_offset: rx.Var[int]
     align: rx.Var[Literal["start", "center", "end"]]
     align_offset: rx.Var[int]
     avoid_collisions: rx.Var[bool]
-    collision_boundary: rx.Var[list]
-    collision_padding: rx.Var[int | dict]
+    collision_boundary: rx.Var[List]
+    collision_padding: rx.Var[int| Padding]
     arrow_padding: rx.Var[int]
     sticky: rx.Var[Literal["partial", "always"]]
     hide_when_detached: rx.Var[bool]
 
 
-class DropdownMenuItem(rx.Component, HTMLAttributes):
+class DropdownMenuItem(HTMLProps):
     """An item within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -157,10 +159,10 @@ class DropdownMenuItem(rx.Component, HTMLAttributes):
     disabled: rx.Var[bool]
     text_value: rx.Var[str]
     as_child: rx.Var[bool]
-    on_select: rx.EventHandler[lambda event: [event]]
+    on_select: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-class DropdownMenuCheckboxItem(rx.Component, HTMLAttributes):
+class DropdownMenuCheckboxItem(HTMLProps):
     """A checkbox item within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -168,15 +170,14 @@ class DropdownMenuCheckboxItem(rx.Component, HTMLAttributes):
 
     # DropdownMenuCheckboxItem specific props
     checked: rx.Var[bool]
-    on_checked_change: rx.EventHandler[lambda checked: [checked]]
-    on_select: rx.EventHandler[lambda evt: [evt]]
+    on_checked_change: TypedEventHandler[bool]
+    on_select: TypedEventHandler[SyntheticEvent[HTMLElement]]
     disabled: rx.Var[bool]
     text_value: rx.Var[str]
     as_child: rx.Var[bool]
-    # TODO: data attributes
 
 
-class DropdownMenuRadioItem(rx.Component, HTMLAttributes):
+class DropdownMenuRadioItem(HTMLProps):
     """A radio item within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -187,10 +188,10 @@ class DropdownMenuRadioItem(rx.Component, HTMLAttributes):
     disabled: rx.Var[bool]
     text_value: rx.Var[str]
     as_child: rx.Var[bool]
-    on_select: rx.EventHandler[lambda evt: [evt]]
+    on_select: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-class DropdownMenuLabel(rx.Component, HTMLAttributes):
+class DropdownMenuLabel(HTMLProps):
     """A label within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -201,7 +202,7 @@ class DropdownMenuLabel(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class DropdownMenuSeparator(rx.Component, HTMLAttributes):
+class DropdownMenuSeparator(HTMLProps):
     """A separator within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
@@ -210,153 +211,50 @@ class DropdownMenuSeparator(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class DropdownMenuShortcut(rx.Component, HTMLAttributes):
+class DropdownMenuShortcut(HTMLProps):
     """A keyboard shortcut within a dropdown menu."""
 
     library = "$/custom/shadcn/dropdown-menu"
     tag = "DropdownMenuShortcut"
 
 
-# Create helper functions
+class DropdownMenuNamespace(rx.ComponentNamespace):
+    root = staticmethod(DropdownMenuRoot.create)
+    trigger = staticmethod(DropdownMenuTrigger.create)
+    group = staticmethod(DropdownMenuGroup.create)
+    portal = staticmethod(DropdownMenuPortal.create)
+    sub = staticmethod(DropdownMenuSub.create)
+    radio_group = staticmethod(DropdownMenuRadioGroup.create)
+    sub_trigger = staticmethod(DropdownMenuSubTrigger.create)
+    sub_content = staticmethod(DropdownMenuSubContent.create)
+    content = staticmethod(DropdownMenuContent.create)
+    item = staticmethod(DropdownMenuItem.create)
+    checkbox_item = staticmethod(DropdownMenuCheckboxItem.create)
+    radio_item = staticmethod(DropdownMenuRadioItem.create)
+    label = staticmethod(DropdownMenuLabel.create)
+    separator = staticmethod(DropdownMenuSeparator.create)
+    shortcut = staticmethod(DropdownMenuShortcut.create)
 
 
-def dropdown_menu(*children, **props):
-    """Create a DropdownMenu component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenu.create(*children, **updated_props)
-
-
-def dropdown_menu_trigger(*children, **props):
-    """Create a DropdownMenuTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuTrigger.create(*children, **updated_props)
-
-
-def dropdown_menu_group(*children, **props):
-    """Create a DropdownMenuGroup component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuGroup.create(*children, **updated_props)
-
-
-def dropdown_menu_portal(*children, **props):
-    """Create a DropdownMenuPortal component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuPortal.create(*children, **updated_props)
-
-
-def dropdown_menu_sub(*children, **props):
-    """Create a DropdownMenuSub component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuSub.create(*children, **updated_props)
-
-
-def dropdown_menu_radio_group(*children, **props):
-    """Create a DropdownMenuRadioGroup component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuRadioGroup.create(*children, **updated_props)
-
-
-def dropdown_menu_sub_trigger(*children, **props):
-    """Create a DropdownMenuSubTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuSubTrigger.create(*children, **updated_props)
-
-
-def dropdown_menu_sub_content(*children, **props):
-    """Create a DropdownMenuSubContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuSubContent.create(*children, **updated_props)
-
-
-def dropdown_menu_content(*children, **props):
-    """Create a DropdownMenuContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuContent.create(*children, **updated_props)
-
-
-def dropdown_menu_item(*children, **props):
-    """Create a DropdownMenuItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuItem.create(*children, **updated_props)
-
-
-def dropdown_menu_checkbox_item(*children, **props):
-    """Create a DropdownMenuCheckboxItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuCheckboxItem.create(*children, **updated_props)
-
-
-def dropdown_menu_radio_item(*children, **props):
-    """Create a DropdownMenuRadioItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuRadioItem.create(*children, **updated_props)
-
-
-def dropdown_menu_label(*children, **props):
-    """Create a DropdownMenuLabel component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuLabel.create(*children, **updated_props)
-
-
-def dropdown_menu_separator(*children, **props):
-    """Create a DropdownMenuSeparator component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuSeparator.create(*children, **updated_props)
-
-
-def dropdown_menu_shortcut(*children, **props):
-    """Create a DropdownMenuShortcut component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return DropdownMenuShortcut.create(*children, **updated_props)
-
-
-class 
+dropdown_menu = DropdownMenuNamespace()
 
 
 __all__ = [
-    "DropdownMenu",
-    "dropdown_menu",
+    "DropdownMenuRoot",
     "DropdownMenuTrigger",
-    "dropdown_menu_trigger",
     "DropdownMenuGroup",
-    "dropdown_menu_group",
     "DropdownMenuPortal",
-    "dropdown_menu_portal",
     "DropdownMenuSub",
-    "dropdown_menu_sub",
     "DropdownMenuRadioGroup",
-    "dropdown_menu_radio_group",
     "DropdownMenuSubTrigger",
-    "dropdown_menu_sub_trigger",
     "DropdownMenuSubContent",
-    "dropdown_menu_sub_content",
     "DropdownMenuContent",
-    "dropdown_menu_content",
     "DropdownMenuItem",
-    "dropdown_menu_item",
     "DropdownMenuCheckboxItem",
-    "dropdown_menu_checkbox_item",
     "DropdownMenuRadioItem",
-    "dropdown_menu_radio_item",
     "DropdownMenuLabel",
-    "dropdown_menu_label",
     "DropdownMenuSeparator",
-    "dropdown_menu_separator",
     "DropdownMenuShortcut",
-    "dropdown_menu_shortcut",
+    "dropdown_menu",
+    "DropdownMenuNamespace",
 ]

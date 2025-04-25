@@ -1,95 +1,72 @@
 from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class Tabs(rx.Component, GlobalAttributes):
+class TabsRoot(HTMLProps):
     """A tabs component based on shadcn/ui."""
 
     library = "$/custom/shadcn/tabs"
     tag = "Tabs"
 
     # Tabs specific props
-    defaultValue: rx.Var[str] = rx.Var.create("")
-    value: rx.Var[str] = rx.Var.create("")
-    onValueChange: rx.EventHandler[lambda value: [value]]
-    orientation: rx.Var[Literal["horizontal", "vertical"]] = rx.Var.create("horizontal")
-    activationMode: rx.Var[Literal["automatic", "manual"]] = rx.Var.create("automatic")
+    default_value: rx.Var[str]
+    value: rx.Var[str]
+    on_value_change: TypedEventHandler[str]
+    orientation: rx.Var[Literal["horizontal", "vertical"]]
+    activation_mode: rx.Var[Literal["automatic", "manual"]]
 
 
-class TabsList(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class TabsList(HTMLProps):
     """The list of tabs."""
 
     library = "$/custom/shadcn/tabs"
     tag = "TabsList"
 
     # TabsList specific props
-    loop: rx.Var[bool] = rx.Var.create(True)
+    loop: rx.Var[bool]
 
 
-class TabsTrigger(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class TabsTrigger(HTMLButtonProps):
     """A tab trigger."""
 
     library = "$/custom/shadcn/tabs"
     tag = "TabsTrigger"
 
     # TabsTrigger specific props
-    value: rx.Var[str] = rx.Var.create("")
-    disabled: rx.Var[bool] = rx.Var.create(False)
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    value: rx.Var[str]
+    disabled: rx.Var[bool]
+    as_child: rx.Var[bool]
 
 
-class TabsContent(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class TabsContent(HTMLProps):
     """The content for a tab."""
 
     library = "$/custom/shadcn/tabs"
     tag = "TabsContent"
 
     # TabsContent specific props
-    value: rx.Var[str] = rx.Var.create("")
-    forceMount: rx.Var[bool] = rx.Var.create(False)
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    value: rx.Var[str]
+    force_mount: rx.Var[bool]
+    as_child: rx.Var[bool]
 
 
-# Create helper functions
+class TabsNamespace(rx.ComponentNamespace):
+    root = staticmethod(TabsRoot.create)
+    list = staticmethod(TabsList.create)
+    trigger = staticmethod(TabsTrigger.create)
+    content = staticmethod(TabsContent.create)
 
 
-def tabs(*children, **props):
-    """Create a Tabs component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Tabs.create(*children, **updated_props)
-
-
-def tabs_list(*children, **props):
-    """Create a TabsList component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return TabsList.create(*children, **updated_props)
-
-
-def tabs_trigger(*children, **props):
-    """Create a TabsTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return TabsTrigger.create(*children, **updated_props)
-
-
-def tabs_content(*children, **props):
-    """Create a TabsContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return TabsContent.create(*children, **updated_props)
+tabs = TabsNamespace()
 
 
 __all__ = [
-    "Tabs",
-    "tabs",
+    "TabsRoot",
     "TabsList",
-    "tabs_list",
     "TabsTrigger",
-    "tabs_trigger",
     "TabsContent",
-    "tabs_content",
+    "tabs",
+    "TabsNamespace",
 ]

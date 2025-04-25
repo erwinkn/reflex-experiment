@@ -1,133 +1,87 @@
-from typing import Optional, Dict, Any
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLProps
 
 
-class Pagination(rx.Component, GlobalAttributes):
+class PaginationRoot(HTMLProps):
     """A pagination component for navigating through pages."""
 
     library = "$/custom/shadcn/pagination"
     tag = "Pagination"
 
 
-class PaginationContent(rx.Component, GlobalAttributes):
+class PaginationContent(HTMLProps):
     """The content container for pagination items."""
 
     library = "$/custom/shadcn/pagination"
     tag = "PaginationContent"
 
 
-class PaginationItem(rx.Component, GlobalAttributes):
+class PaginationItem(HTMLProps):
     """An item within the pagination component."""
 
     library = "$/custom/shadcn/pagination"
     tag = "PaginationItem"
 
 
-class PaginationLink(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class PaginationLink(HTMLProps):
     """A link within the pagination component."""
 
     library = "$/custom/shadcn/pagination"
     tag = "PaginationLink"
 
     # PaginationLink specific props
-    isActive: rx.Var[bool] = rx.Var.create(False)
-    href: rx.Var[str] = rx.Var.create("#")
+    is_active: rx.Var[bool]
+    href: rx.Var[str]
 
 
-class PaginationPrevious(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class PaginationPrevious(HTMLProps):
     """A button to navigate to the previous page."""
 
     library = "$/custom/shadcn/pagination"
     tag = "PaginationPrevious"
 
     # PaginationPrevious specific props
-    href: rx.Var[str] = rx.Var.create("#")
+    href: rx.Var[str]
 
 
-class PaginationNext(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class PaginationNext(HTMLProps):
     """A button to navigate to the next page."""
 
     library = "$/custom/shadcn/pagination"
     tag = "PaginationNext"
 
     # PaginationNext specific props
-    href: rx.Var[str] = rx.Var.create("#")
+    href: rx.Var[str]
 
 
-class PaginationEllipsis(rx.Component, GlobalAttributes):
+class PaginationEllipsis(HTMLProps):
     """An ellipsis to represent skipped page numbers."""
 
     library = "$/custom/shadcn/pagination"
     tag = "PaginationEllipsis"
 
 
-# Create helper functions
+class PaginationNamespace(rx.ComponentNamespace):
+    root = staticmethod(PaginationRoot.create)
+    content = staticmethod(PaginationContent.create)
+    item = staticmethod(PaginationItem.create)
+    link = staticmethod(PaginationLink.create)
+    previous = staticmethod(PaginationPrevious.create)
+    next = staticmethod(PaginationNext.create)
+    ellipsis = staticmethod(PaginationEllipsis.create)
 
 
-def pagination(*children, **props):
-    """Create a Pagination component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Pagination.create(*children, **updated_props)
-
-
-def pagination_content(*children, **props):
-    """Create a PaginationContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PaginationContent.create(*children, **updated_props)
-
-
-def pagination_item(*children, **props):
-    """Create a PaginationItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PaginationItem.create(*children, **updated_props)
-
-
-def pagination_link(*children, **props):
-    """Create a PaginationLink component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PaginationLink.create(*children, **updated_props)
-
-
-def pagination_previous(*children, **props):
-    """Create a PaginationPrevious component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PaginationPrevious.create(*children, **updated_props)
-
-
-def pagination_next(*children, **props):
-    """Create a PaginationNext component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PaginationNext.create(*children, **updated_props)
-
-
-def pagination_ellipsis(*children, **props):
-    """Create a PaginationEllipsis component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PaginationEllipsis.create(*children, **updated_props)
+pagination = PaginationNamespace()
 
 
 __all__ = [
-    "Pagination",
-    "pagination",
+    "PaginationRoot",
     "PaginationContent",
-    "pagination_content",
     "PaginationItem",
-    "pagination_item",
     "PaginationLink",
-    "pagination_link",
     "PaginationPrevious",
-    "pagination_previous",
     "PaginationNext",
-    "pagination_next",
     "PaginationEllipsis",
-    "pagination_ellipsis",
+    "pagination",
+    "PaginationNamespace",
 ]

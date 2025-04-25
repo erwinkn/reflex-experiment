@@ -1,55 +1,46 @@
 from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import FormElementMixin, GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLButtonProps, HTMLProps
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class RadioGroup(rx.Component, FormElementMixin, HTMLEventHandlersMixin):
+class RadioGroupRoot(HTMLProps):
     """A radio group component based on shadcn/ui."""
 
     library = "$/custom/shadcn/radio-group"
     tag = "RadioGroup"
 
     # RadioGroup specific props
-    defaultValue: rx.Var[str] = rx.Var.create("")
-    onValueChange: rx.EventHandler[lambda value: [value]]
-    loop: rx.Var[bool] = rx.Var.create(True)
-    orientation: rx.Var[Literal["horizontal", "vertical"]] = rx.Var.create("vertical")
+    default_value: rx.Var[str]
+    on_value_change: TypedEventHandler[str]
+    loop: rx.Var[bool]
+    orientation: rx.Var[Literal["horizontal", "vertical"]]
 
 
-class RadioGroupItem(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class RadioGroupItem(HTMLButtonProps):
     """A radio button in a radio group component."""
 
     library = "$/custom/shadcn/radio-group"
     tag = "RadioGroupItem"
 
     # RadioGroupItem specific props
-    value: rx.Var[str] = rx.Var.create("")
-    disabled: rx.Var[bool] = rx.Var.create(False)
-    required: rx.Var[bool] = rx.Var.create(False)
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    value: rx.Var[str]
+    disabled: rx.Var[bool]
+    required: rx.Var[bool]
+    as_child: rx.Var[bool]
 
 
-# Create helper functions
+class RadioGroupNamespace(rx.ComponentNamespace):
+    root = staticmethod(RadioGroupRoot.create)
+    item = staticmethod(RadioGroupItem.create)
 
 
-def radio_group(*children, **props):
-    """Create a RadioGroup component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return RadioGroup.create(*children, **updated_props)
-
-
-def radio_group_item(*children, **props):
-    """Create a RadioGroupItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return RadioGroupItem.create(*children, **updated_props)
+radio_group = RadioGroupNamespace()
 
 
 __all__ = [
-    "RadioGroup",
-    "radio_group",
+    "RadioGroupRoot",
     "RadioGroupItem",
-    "radio_group_item",
+    "radio_group",
+    "RadioGroupNamespace",
 ]

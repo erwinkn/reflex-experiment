@@ -1,52 +1,42 @@
 from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLProps
 
 
-class ScrollArea(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class ScrollAreaRoot(HTMLProps):
     """A scroll area component based on shadcn/ui."""
 
     library = "$/custom/shadcn/scroll-area"
     tag = "ScrollArea"
 
     # ScrollArea specific props
-    type: rx.Var[Literal["auto", "always", "scroll", "hover"]] = rx.Var.create("auto")
-    scrollHideDelay: rx.Var[int] = rx.Var.create(600)
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    type: rx.Var[Literal["auto", "always", "scroll", "hover"]]
+    scroll_hide_delay: rx.Var[int]
+    as_child: rx.Var[bool]
 
 
-class ScrollBar(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class ScrollBar(HTMLProps):
     """A scroll bar within a scroll area."""
 
     library = "$/custom/shadcn/scroll-area"
     tag = "ScrollBar"
 
     # ScrollBar specific props
-    orientation: rx.Var[Literal["horizontal", "vertical"]] = rx.Var.create("vertical")
-    forceMount: rx.Var[bool] = rx.Var.create(False)
+    orientation: rx.Var[Literal["horizontal", "vertical"]]
+    force_mount: rx.Var[bool]
 
 
-# Create helper functions
+class ScrollAreaNamespace(rx.ComponentNamespace):
+    root = staticmethod(ScrollAreaRoot.create)
+    scrollbar = staticmethod(ScrollBar.create)
 
 
-def scroll_area(*children, **props):
-    """Create a ScrollArea component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ScrollArea.create(*children, **updated_props)
-
-
-def scroll_bar(*children, **props):
-    """Create a ScrollBar component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ScrollBar.create(*children, **updated_props)
+scroll_area = ScrollAreaNamespace()
 
 
 __all__ = [
-    "ScrollArea",
-    "scroll_area",
+    "ScrollAreaRoot",
     "ScrollBar",
-    "scroll_bar",
+    "scroll_area",
+    "ScrollAreaNamespace",
 ]

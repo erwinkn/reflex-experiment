@@ -1,22 +1,29 @@
 from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import HTMLAttributes
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
+from reflex_experiment.components.ui.dropdown_menu import Padding
+from reflex_experiment.elements import HTMLElement
+from reflex_experiment.events import (
+    FocusEvent,
+    KeyboardEvent,
+    PointerEvent,
+    SyntheticEvent,
+)
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class ContextMenu(rx.Component):
+class ContextMenuRoot(HTMLProps):
     """A context menu component based on shadcn/ui."""
 
     library = "$/custom/shadcn/context-menu"
     tag = "ContextMenu"
 
     # ContextMenu specific props
-    # dir included in HTMLAttributes
-    on_open_change: rx.EventHandler[lambda open: [open]]
-    modal: rx.Var[bool] = rx.Var.create(True)
+    on_open_change: TypedEventHandler[bool]
+    modal: rx.Var[bool]
 
 
-class ContextMenuTrigger(rx.Component, HTMLAttributes):
+class ContextMenuTrigger(HTMLButtonProps):
     """A trigger for a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -27,7 +34,7 @@ class ContextMenuTrigger(rx.Component, HTMLAttributes):
     disabled: rx.Var[bool]
 
 
-class ContextMenuGroup(rx.Component, HTMLAttributes):
+class ContextMenuGroup(HTMLProps):
     """A group of context menu items."""
 
     library = "$/custom/shadcn/context-menu"
@@ -36,7 +43,7 @@ class ContextMenuGroup(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class ContextMenuPortal(rx.Component):
+class ContextMenuPortal(HTMLProps):
     """A portal for a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -47,7 +54,7 @@ class ContextMenuPortal(rx.Component):
     force_mount: rx.Var[bool]
 
 
-class ContextMenuSub(rx.Component):
+class ContextMenuSub(HTMLProps):
     """A submenu within a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -56,10 +63,10 @@ class ContextMenuSub(rx.Component):
     # ContextMenuSub specific props
     open: rx.Var[bool]
     default_open: rx.Var[bool]
-    on_open_change: rx.EventHandler[lambda open: [open]]
+    on_open_change: TypedEventHandler[bool]
 
 
-class ContextMenuRadioGroup(rx.Component, HTMLAttributes):
+class ContextMenuRadioGroup(HTMLProps):
     """A radio group within a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -68,10 +75,10 @@ class ContextMenuRadioGroup(rx.Component, HTMLAttributes):
     # ContextMenuRadioGroup specific props
     as_child: rx.Var[bool]
     value: rx.Var[str]
-    on_value_change: rx.EventHandler[lambda value: [value]]
+    on_value_change: TypedEventHandler[str]
 
 
-class ContextMenuContent(rx.Component, HTMLAttributes):
+class ContextMenuContent(HTMLProps):
     """The content of a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -79,23 +86,27 @@ class ContextMenuContent(rx.Component, HTMLAttributes):
 
     # ContextMenuContent specific props
     as_child: rx.Var[bool]
-    loop: rx.Var[bool] = rx.Var.create(False)
-    on_close_auto_focus: rx.EventHandler[lambda evt: [evt]]
-    on_escape_key_down: rx.EventHandler[lambda evt: [evt]]
-    on_pointer_down_outside: rx.EventHandler[lambda evt: [evt]]
-    on_focus_outside: rx.EventHandler[lambda evt: [evt]]
-    on_interact_outside: rx.EventHandler[lambda evt: [evt]]
+    loop: rx.Var[bool]
     force_mount: rx.Var[bool]
-    alignOffset: rx.Var[int]
+    align_offset: rx.Var[int]
     avoid_collisions: rx.Var[bool]
-    # TODO: support elements here
-    collision_boundary: rx.Var[list[str]]
-    collision_padding: rx.Var[int | float | dict]
+    # Has to be an element or list of elements
+    # collision_boundary: rx.Var[List[str]]
+    collision_padding: rx.Var[int | Padding]
     sticky: rx.Var[Literal["partial", "always"]]
     hide_when_detached: rx.Var[bool]
+    on_close_auto_focus: TypedEventHandler[SyntheticEvent[HTMLElement]]
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
+    on_pointer_down_outside: TypedEventHandler[PointerEvent[HTMLElement]]
+    on_focus_outside: TypedEventHandler[FocusEvent[HTMLElement]]
+    # Actually this is PointerEvent | FocusEvent, but not sure the
+    # serializer/deserializer can handle this kind of union.
+    # If you want the specific event, use on_pointer_down_outside and
+    # on_focus_outside.
+    on_interact_outside: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-class ContextMenuItem(rx.Component, HTMLAttributes):
+class ContextMenuItem(HTMLProps):
     """An item in a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -104,11 +115,11 @@ class ContextMenuItem(rx.Component, HTMLAttributes):
     # ContextMenuItem specific props
     as_child: rx.Var[bool]
     disabled: rx.Var[bool]
-    on_select: rx.EventHandler[lambda event: [event]]
+    on_select: TypedEventHandler[SyntheticEvent[HTMLElement]]
     text_value: rx.Var[str]
 
 
-class ContextMenuRadioItem(rx.Component, HTMLAttributes):
+class ContextMenuRadioItem(HTMLProps):
     """A radio item within a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -118,11 +129,11 @@ class ContextMenuRadioItem(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
     value: rx.Var[str]
     disabled: rx.Var[bool]
-    on_select: rx.EventHandler[lambda event: [event]]
+    on_select: TypedEventHandler[SyntheticEvent[HTMLElement]]
     text_value: rx.Var[str]
 
 
-class ContextMenuLabel(rx.Component, HTMLAttributes):
+class ContextMenuLabel(HTMLProps):
     """A label within a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -132,7 +143,7 @@ class ContextMenuLabel(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class ContextMenuSeparator(rx.Component, HTMLAttributes):
+class ContextMenuSeparator(HTMLProps):
     """A separator within a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -141,14 +152,14 @@ class ContextMenuSeparator(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class ContextMenuShortcut(rx.Component, HTMLAttributes):
+class ContextMenuShortcut(HTMLProps):
     """A keyboard shortcut within a context menu."""
 
     library = "$/custom/shadcn/context-menu"
     tag = "ContextMenuShortcut"
 
 
-class ContextMenuCheckboxItem(rx.Component, HTMLAttributes):
+class ContextMenuCheckboxItem(HTMLProps):
     """A checkbox item within a context menu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -157,13 +168,13 @@ class ContextMenuCheckboxItem(rx.Component, HTMLAttributes):
     # ContextMenuCheckboxItem specific props
     as_child: rx.Var[bool]
     checked: rx.Var[bool]
-    on_checked_change: rx.EventHandler[lambda checked: [checked]]
-    on_select: rx.EventHandler[lambda evt: [evt]]
+    on_checked_change: TypedEventHandler[bool]
+    on_select: TypedEventHandler[SyntheticEvent[HTMLElement]]
     disabled: rx.Var[bool]
     text_value: rx.Var[str]
 
 
-class ContextMenuSubTrigger(rx.Component, HTMLAttributes):
+class ContextMenuSubTrigger(HTMLButtonProps):
     """A trigger for a context submenu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -175,7 +186,7 @@ class ContextMenuSubTrigger(rx.Component, HTMLAttributes):
     text_value: rx.Var[str]
 
 
-class ContextMenuSubContent(rx.Component, HTMLAttributes):
+class ContextMenuSubContent(HTMLProps):
     """The content of a context submenu."""
 
     library = "$/custom/shadcn/context-menu"
@@ -184,158 +195,64 @@ class ContextMenuSubContent(rx.Component, HTMLAttributes):
     # ContextMenuSubContent specific props
     as_child: rx.Var[bool]
     loop: rx.Var[bool]
-    on_escape_key_down: rx.EventHandler[lambda evt: [evt]]
-    on_pointer_down_outside: rx.EventHandler[lambda evt: [evt]]
-    on_focus_outside: rx.EventHandler[lambda evt: [evt]]
-    on_interact_outside: rx.EventHandler[lambda evt: [evt]]
     force_mount: rx.Var[bool]
     side_offset: rx.Var[int]
     align_offset: rx.Var[int]
     avoid_collisions: rx.Var[bool]
-    collision_boundary: rx.Var[list]
-    collision_padding: rx.Var[int | dict]
+    # Element or Element[]
+    # collision_boundary: rx.Var[List[Any]]
+    collision_padding: rx.Var[int | Padding]
     arrow_padding: rx.Var[int]
     sticky: rx.Var[Literal["partial", "always"]]
     hide_when_detached: rx.Var[bool]
 
-
-# Create helper functions
-
-
-def context_menu(*children, **props):
-    """Create a ContextMenu component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenu.create(*children, **updated_props)
-
-
-def context_menu_trigger(*children, **props):
-    """Create a ContextMenuTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuTrigger.create(*children, **updated_props)
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
+    on_pointer_down_outside: TypedEventHandler[PointerEvent[HTMLElement]]
+    on_focus_outside: TypedEventHandler[FocusEvent[HTMLElement]]
+    # Actually this is PointerEvent | FocusEvent, but not sure the
+    # serializer/deserializer can handle this kind of union.
+    # If you want the specific event, use on_pointer_down_outside and
+    # on_focus_outside.
+    on_interact_outside: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-def context_menu_content(*children, **props):
-    """Create a ContextMenuContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuContent.create(*children, **updated_props)
+class ContextMenuNamespace(rx.ComponentNamespace):
+    root = staticmethod(ContextMenuRoot.create)
+    trigger = staticmethod(ContextMenuTrigger.create)
+    group = staticmethod(ContextMenuGroup.create)
+    portal = staticmethod(ContextMenuPortal.create)
+    sub = staticmethod(ContextMenuSub.create)
+    radio_group = staticmethod(ContextMenuRadioGroup.create)
+    content = staticmethod(ContextMenuContent.create)
+    item = staticmethod(ContextMenuItem.create)
+    radio_item = staticmethod(ContextMenuRadioItem.create)
+    label = staticmethod(ContextMenuLabel.create)
+    separator = staticmethod(ContextMenuSeparator.create)
+    shortcut = staticmethod(ContextMenuShortcut.create)
+    checkbox_item = staticmethod(ContextMenuCheckboxItem.create)
+    sub_trigger = staticmethod(ContextMenuSubTrigger.create)
+    sub_content = staticmethod(ContextMenuSubContent.create)
 
 
-def context_menu_item(*children, **props):
-    """Create a ContextMenuItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuItem.create(*children, **updated_props)
-
-
-def context_menu_group(*children, **props):
-    """Create a ContextMenuGroup component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuGroup.create(*children, **updated_props)
-
-
-def context_menu_radio_group(*children, **props):
-    """Create a ContextMenuRadioGroup component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuRadioGroup.create(*children, **updated_props)
-
-
-def context_menu_radio_item(*children, **props):
-    """Create a ContextMenuRadioItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuRadioItem.create(*children, **updated_props)
-
-
-def context_menu_label(*children, **props):
-    """Create a ContextMenuLabel component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuLabel.create(*children, **updated_props)
-
-
-def context_menu_separator(*children, **props):
-    """Create a ContextMenuSeparator component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuSeparator.create(*children, **updated_props)
-
-
-def context_menu_shortcut(*children, **props):
-    """Create a ContextMenuShortcut component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuShortcut.create(*children, **updated_props)
-
-
-def context_menu_checkbox_item(*children, **props):
-    """Create a ContextMenuCheckboxItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuCheckboxItem.create(*children, **updated_props)
-
-
-def context_menu_sub(*children, **props):
-    """Create a ContextMenuSub component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuSub.create(*children, **updated_props)
-
-
-def context_menu_sub_trigger(*children, **props):
-    """Create a ContextMenuSubTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuSubTrigger.create(*children, **updated_props)
-
-
-def context_menu_sub_content(*children, **props):
-    """Create a ContextMenuSubContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuSubContent.create(*children, **updated_props)
-
-
-def context_menu_portal(*children, **props):
-    """Create a ContextMenuPortal component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return ContextMenuPortal.create(*children, **updated_props)
+context_menu = ContextMenuNamespace()
 
 
 __all__ = [
-    "ContextMenu",
-    "context_menu",
+    "ContextMenuRoot",
     "ContextMenuTrigger",
-    "context_menu_trigger",
-    "ContextMenuContent",
-    "context_menu_content",
-    "ContextMenuItem",
-    "context_menu_item",
     "ContextMenuGroup",
-    "context_menu_group",
-    "ContextMenuRadioGroup",
-    "context_menu_radio_group",
-    "ContextMenuRadioItem",
-    "context_menu_radio_item",
-    "ContextMenuLabel",
-    "context_menu_label",
-    "ContextMenuSeparator",
-    "context_menu_separator",
-    "ContextMenuShortcut",
-    "context_menu_shortcut",
-    "ContextMenuCheckboxItem",
-    "context_menu_checkbox_item",
-    "ContextMenuSub",
-    "context_menu_sub",
-    "ContextMenuSubTrigger",
-    "context_menu_sub_trigger",
-    "ContextMenuSubContent",
-    "context_menu_sub_content",
     "ContextMenuPortal",
-    "context_menu_portal",
+    "ContextMenuSub",
+    "ContextMenuRadioGroup",
+    "ContextMenuContent",
+    "ContextMenuItem",
+    "ContextMenuRadioItem",
+    "ContextMenuLabel",
+    "ContextMenuSeparator",
+    "ContextMenuShortcut",
+    "ContextMenuCheckboxItem",
+    "ContextMenuSubTrigger",
+    "ContextMenuSubContent",
+    "context_menu",
+    "ContextMenuNamespace",
 ]

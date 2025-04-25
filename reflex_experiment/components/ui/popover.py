@@ -1,88 +1,85 @@
 from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
+from reflex_experiment.components.ui.dropdown_menu import Padding
+from reflex_experiment.elements import HTMLElement
+from reflex_experiment.events import (
+    FocusEvent,
+    KeyboardEvent,
+    PointerEvent,
+    SyntheticEvent,
+)
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class Popover(rx.Component, GlobalAttributes):
+class PopoverRoot(HTMLProps):
     """A popover component based on shadcn/ui."""
 
     library = "$/custom/shadcn/popover"
     tag = "Popover"
 
     # Popover specific props
-    defaultOpen: rx.Var[bool] = rx.Var.create(False)
-    open: rx.Var[bool] = rx.Var.create(False)
-    onOpenChange: rx.EventHandler[lambda open: [open]]
-    modal: rx.Var[bool] = rx.Var.create(False)
+    default_open: rx.Var[bool]
+    open: rx.Var[bool]
+    # (open: boolean) => void
+    on_open_change: TypedEventHandler[bool]
+    modal: rx.Var[bool]
 
 
-class PopoverTrigger(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class PopoverTrigger(HTMLButtonProps):
     """A trigger for a popover."""
 
     library = "$/custom/shadcn/popover"
     tag = "PopoverTrigger"
 
     # PopoverTrigger specific props
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    as_child: rx.Var[bool]
 
 
-class PopoverContent(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class PopoverContent(HTMLProps):
     """The content of a popover."""
 
     library = "$/custom/shadcn/popover"
     tag = "PopoverContent"
 
     # PopoverContent specific props
-    forceMount: rx.Var[bool] = rx.Var.create(False)
-    side: rx.Var[Literal["top", "right", "bottom", "left"]] = rx.Var.create("bottom")
-    sideOffset: rx.Var[int] = rx.Var.create(4)
-    align: rx.Var[Literal["start", "center", "end"]] = rx.Var.create("center")
-    alignOffset: rx.Var[int] = rx.Var.create(0)
-    avoidCollisions: rx.Var[bool] = rx.Var.create(True)
-    collisionBoundary: rx.Var[str] = rx.Var.create("")
-    collisionPadding: rx.Var[int] = rx.Var.create(0)
-    arrowPadding: rx.Var[int] = rx.Var.create(0)
-    sticky: rx.Var[Literal["partial", "always"]] = rx.Var.create("partial")
-    hideWhenDetached: rx.Var[bool] = rx.Var.create(False)
-    updatePositionStrategy: rx.Var[Literal["optimized", "always"]] = rx.Var.create(
-        "optimized"
-    )
-    onEscapeKeyDown: rx.EventHandler[lambda event: [event]]
-    onPointerDownOutside: rx.EventHandler[lambda event: [event]]
-    onFocusOutside: rx.EventHandler[lambda event: [event]]
-    onInteractOutside: rx.EventHandler[lambda event: [event]]
+    force_mount: rx.Var[bool]
+    side: rx.Var[Literal["top", "right", "bottom", "left"]]
+    side_offset: rx.Var[int]
+    align: rx.Var[Literal["start", "center", "end"]]
+    align_offset: rx.Var[int]
+    avoid_collisions: rx.Var[bool]
+    # Have to pass in elements
+    # collision_boundary: rx.Var[str]
+    collision_padding: rx.Var[int | Padding]
+    arrow_padding: rx.Var[int]
+    sticky: rx.Var[Literal["partial", "always"]]
+    hide_when_detached: rx.Var[bool]
+    on_open_auto_focus: TypedEventHandler[SyntheticEvent[HTMLElement]]
+    on_close_auto_focus: TypedEventHandler[SyntheticEvent[HTMLElement]]
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
+    on_pointer_down_outside: TypedEventHandler[PointerEvent[HTMLElement]]
+    on_focus_outside: TypedEventHandler[FocusEvent[HTMLElement]]
+    # Actually this is PointerEvent | FocusEvent, but not sure the
+    # serializer/deserializer can handle this kind of union.
+    # If you want the specific event, use on_pointer_down_outside and
+    # on_focus_outside.
+    on_interact_outside: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-# Create helper functions
+class PopoverNamespace(rx.ComponentNamespace):
+    root = staticmethod(PopoverRoot.create)
+    trigger = staticmethod(PopoverTrigger.create)
+    content = staticmethod(PopoverContent.create)
 
 
-def popover(*children, **props):
-    """Create a Popover component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Popover.create(*children, **updated_props)
-
-
-def popover_trigger(*children, **props):
-    """Create a PopoverTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PopoverTrigger.create(*children, **updated_props)
-
-
-def popover_content(*children, **props):
-    """Create a PopoverContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return PopoverContent.create(*children, **updated_props)
+popover = PopoverNamespace()
 
 
 __all__ = [
-    "Popover",
-    "popover",
+    "PopoverRoot",
     "PopoverTrigger",
-    "popover_trigger",
     "PopoverContent",
-    "popover_content",
+    "popover",
+    "PopoverNamespace",
 ]

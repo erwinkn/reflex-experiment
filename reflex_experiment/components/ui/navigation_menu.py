@@ -1,172 +1,132 @@
 from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin, AnchorElementMixin
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
+from reflex_experiment.elements import HTMLElement
+from reflex_experiment.events import (
+    FocusEvent,
+    KeyboardEvent,
+    PointerEvent,
+    SyntheticEvent,
+)
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class NavigationMenu(rx.Component, GlobalAttributes):
+class NavigationMenuRoot(HTMLProps):
     """A navigation menu component based on shadcn/ui."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenu"
 
     # NavigationMenu specific props
-    defaultValue: rx.Var[str] = rx.Var.create("")
-    value: rx.Var[str] = rx.Var.create("")
-    onValueChange: rx.EventHandler[lambda value: [value]]
-    delayDuration: rx.Var[int] = rx.Var.create(200)
-    skipDelayDuration: rx.Var[int] = rx.Var.create(300)
-    orientation: rx.Var[Literal["horizontal", "vertical"]] = rx.Var.create("horizontal")
+    default_value: rx.Var[str]
+    value: rx.Var[str]
+    on_value_change: TypedEventHandler[str]
+    delay_duration: rx.Var[int]
+    skip_delay_duration: rx.Var[int]
+    orientation: rx.Var[Literal["horizontal", "vertical"]]
 
 
-class NavigationMenuList(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class NavigationMenuList(HTMLProps):
     """A list of navigation menu items."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenuList"
 
 
-class NavigationMenuItem(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class NavigationMenuItem(HTMLProps):
     """An item within a navigation menu."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenuItem"
 
     # NavigationMenuItem specific props
-    value: rx.Var[str] = rx.Var.create("")
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    value: rx.Var[str]
+    as_child: rx.Var[bool]
 
 
-class NavigationMenuTrigger(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class NavigationMenuTrigger(HTMLButtonProps):
     """A trigger for a navigation menu dropdown."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenuTrigger"
 
     # NavigationMenuTrigger specific props
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    as_child: rx.Var[bool]
 
 
-class NavigationMenuContent(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class NavigationMenuContent(HTMLProps):
     """The content for a navigation menu dropdown."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenuContent"
 
     # NavigationMenuContent specific props
-    forceMount: rx.Var[bool] = rx.Var.create(False)
-    onEscapeKeyDown: rx.EventHandler[lambda event: [event]]
-    onPointerDownOutside: rx.EventHandler[lambda event: [event]]
-    onFocusOutside: rx.EventHandler[lambda event: [event]]
-    onInteractOutside: rx.EventHandler[lambda event: [event]]
+    force_mount: rx.Var[bool]
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
+    on_pointer_down_outside: TypedEventHandler[PointerEvent[HTMLElement]]
+    on_focus_outside: TypedEventHandler[FocusEvent[HTMLElement]]
+    # Actually this is PointerEvent | FocusEvent, but not sure the
+    # serializer/deserializer can handle this kind of union.
+    # If you want the specific event, use on_pointer_down_outside and
+    # on_focus_outside.
+    on_interact_outside: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-class NavigationMenuLink(rx.Component, AnchorElementMixin, HTMLEventHandlersMixin):
+class NavigationMenuLink(HTMLProps):
     """A link within a navigation menu."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenuLink"
 
     # NavigationMenuLink specific props
-    active: rx.Var[bool] = rx.Var.create(False)
-    onSelect: rx.EventHandler[lambda event: [event]]
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    active: rx.Var[bool]
+    as_child: rx.Var[bool]
+    on_select: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-class NavigationMenuViewport(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class NavigationMenuViewport(HTMLProps):
     """The viewport for the navigation menu dropdowns."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenuViewport"
 
     # NavigationMenuViewport specific props
-    forceMount: rx.Var[bool] = rx.Var.create(False)
+    force_mount: rx.Var[bool]
 
 
-class NavigationMenuIndicator(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class NavigationMenuIndicator(HTMLProps):
     """An indicator for the currently active item."""
 
     library = "$/custom/shadcn/navigation-menu"
     tag = "NavigationMenuIndicator"
 
     # NavigationMenuIndicator specific props
-    forceMount: rx.Var[bool] = rx.Var.create(False)
+    force_mount: rx.Var[bool]
 
 
-# Create helper functions
+class NavigationMenuNamespace(rx.ComponentNamespace):
+    root = staticmethod(NavigationMenuRoot.create)
+    list = staticmethod(NavigationMenuList.create)
+    item = staticmethod(NavigationMenuItem.create)
+    trigger = staticmethod(NavigationMenuTrigger.create)
+    content = staticmethod(NavigationMenuContent.create)
+    link = staticmethod(NavigationMenuLink.create)
+    viewport = staticmethod(NavigationMenuViewport.create)
+    indicator = staticmethod(NavigationMenuIndicator.create)
 
 
-def navigation_menu(*children, **props):
-    """Create a NavigationMenu component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenu.create(*children, **updated_props)
-
-
-def navigation_menu_list(*children, **props):
-    """Create a NavigationMenuList component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenuList.create(*children, **updated_props)
-
-
-def navigation_menu_item(*children, **props):
-    """Create a NavigationMenuItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenuItem.create(*children, **updated_props)
-
-
-def navigation_menu_trigger(*children, **props):
-    """Create a NavigationMenuTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenuTrigger.create(*children, **updated_props)
-
-
-def navigation_menu_content(*children, **props):
-    """Create a NavigationMenuContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenuContent.create(*children, **updated_props)
-
-
-def navigation_menu_link(*children, **props):
-    """Create a NavigationMenuLink component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenuLink.create(*children, **updated_props)
-
-
-def navigation_menu_viewport(*children, **props):
-    """Create a NavigationMenuViewport component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenuViewport.create(*children, **updated_props)
-
-
-def navigation_menu_indicator(*children, **props):
-    """Create a NavigationMenuIndicator component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return NavigationMenuIndicator.create(*children, **updated_props)
+navigation_menu = NavigationMenuNamespace()
 
 
 __all__ = [
-    "NavigationMenu",
-    "navigation_menu",
+    "NavigationMenuRoot",
     "NavigationMenuList",
-    "navigation_menu_list",
     "NavigationMenuItem",
-    "navigation_menu_item",
     "NavigationMenuTrigger",
-    "navigation_menu_trigger",
     "NavigationMenuContent",
-    "navigation_menu_content",
     "NavigationMenuLink",
-    "navigation_menu_link",
     "NavigationMenuViewport",
-    "navigation_menu_viewport",
     "NavigationMenuIndicator",
-    "navigation_menu_indicator",
+    "navigation_menu",
+    "NavigationMenuNamespace",
 ]

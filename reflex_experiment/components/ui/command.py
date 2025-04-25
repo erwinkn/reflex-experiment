@@ -1,10 +1,9 @@
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from stoneware_app.components.ui.dialog import DialogAttributes
-from ..attributes import HTMLAttributes, InputHTMLAttributes
+from reflex_experiment.attributes import HTMLProps, HTMLInputProps, HTMLButtonProps
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class Command(rx.Component, HTMLAttributes):
+class CommandRoot(HTMLProps):
     """A command menu component based on shadcn/ui."""
 
     library = "$/custom/shadcn/command"
@@ -14,32 +13,40 @@ class Command(rx.Component, HTMLAttributes):
     # Command specific props
     label: rx.Var[str]
     should_filter: rx.Var[bool]
-    filter: rx.EventHandler[lambda value, search, keywords: [value, search, keywords]]
+    filter: TypedEventHandler[tuple[str, str, list[str] | None]]
     default_value: rx.Var[str]
     value: rx.Var[str]
-    on_value_change: rx.EventHandler[lambda value: [value]]
+    on_value_change: TypedEventHandler[str]
     loop: rx.Var[bool]
     disable_pointer_selection: rx.Var[bool]
     vim_bindings: rx.Var[bool]
     as_child: rx.Var[bool]
 
 
-class CommandDialog(rx.Component, DialogAttributes):
+class CommandDialog(HTMLProps):
+    """A dialog version of the command component."""
+
     library = "$/custom/shadcn/command"
     tag = "CommandDialog"
 
+    # Dialog specific props
+    default_open: rx.Var[bool]
+    open: rx.Var[bool]
+    on_open_change: TypedEventHandler[bool]
+    modal: rx.Var[bool]
 
-class CommandInput(rx.Component, InputHTMLAttributes):
+
+class CommandInput(HTMLInputProps):
     """An input for a command menu."""
 
     library = "$/custom/shadcn/command"
     tag = "CommandInput"
 
     as_child: rx.Var[bool]
-    on_value_change: rx.EventHandler[lambda search: [search]]
+    on_value_change: TypedEventHandler[str]
 
 
-class CommandList(rx.Component, HTMLAttributes):
+class CommandList(HTMLProps):
     """A list of command items."""
 
     library = "$/custom/shadcn/command"
@@ -49,7 +56,7 @@ class CommandList(rx.Component, HTMLAttributes):
     label: rx.Var[str]
 
 
-class CommandEmpty(rx.Component, HTMLAttributes):
+class CommandEmpty(HTMLProps):
     """A component to display when no results are found."""
 
     library = "$/custom/shadcn/command"
@@ -58,7 +65,7 @@ class CommandEmpty(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class CommandGroup(rx.Component, HTMLAttributes):
+class CommandGroup(HTMLProps):
     """A group of command items."""
 
     library = "$/custom/shadcn/command"
@@ -70,21 +77,21 @@ class CommandGroup(rx.Component, HTMLAttributes):
     force_mount: rx.Var[bool]
 
 
-class CommandItem(rx.Component, HTMLAttributes):
+class CommandItem(HTMLProps):
     """An item in a command menu."""
 
     library = "$/custom/shadcn/command"
     tag = "CommandItem"
 
     # CommandItem specific props
-    disabled: rx.Var[bool] = rx.Var.create(False)
-    on_select: rx.EventHandler[lambda value: [value]]
+    disabled: rx.Var[bool]
+    on_select: TypedEventHandler[str]
     value: rx.Var[str]
     keywords: rx.Var[list[str]]
     force_mount: rx.Var[bool]
 
 
-class CommandSeparator(rx.Component, HTMLAttributes):
+class CommandSeparator(HTMLProps):
     """A separator between command items or groups."""
 
     library = "$/custom/shadcn/command"
@@ -95,85 +102,38 @@ class CommandSeparator(rx.Component, HTMLAttributes):
     as_child: rx.Var[bool]
 
 
-class CommandShortcut(rx.Component, HTMLAttributes):
+class CommandShortcut(HTMLProps):
     """A keyboard shortcut displayed in a command item."""
 
     library = "$/custom/shadcn/command"
     tag = "CommandShortcut"
 
 
-# Create helper functions
-def command(*children, **props):
-    """Create a Command component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Command.create(*children, **updated_props)
+class CommandNamespace(rx.ComponentNamespace):
+    root = staticmethod(CommandRoot.create)
+    dialog = staticmethod(CommandDialog.create)
+    input = staticmethod(CommandInput.create)
+    list = staticmethod(CommandList.create)
+    empty = staticmethod(CommandEmpty.create)
+    group = staticmethod(CommandGroup.create)
+    item = staticmethod(CommandItem.create)
+    separator = staticmethod(CommandSeparator.create)
+    shortcut = staticmethod(CommandShortcut.create)
 
 
-def command_input(*children, **props):
-    """Create a CommandInput component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CommandInput.create(*children, **updated_props)
-
-
-def command_list(*children, **props):
-    """Create a CommandList component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CommandList.create(*children, **updated_props)
-
-
-def command_empty(*children, **props):
-    """Create a CommandEmpty component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CommandEmpty.create(*children, **updated_props)
-
-
-def command_group(*children, **props):
-    """Create a CommandGroup component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CommandGroup.create(*children, **updated_props)
-
-
-def command_item(*children, **props):
-    """Create a CommandItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CommandItem.create(*children, **updated_props)
-
-
-def command_separator(*children, **props):
-    """Create a CommandSeparator component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CommandSeparator.create(*children, **updated_props)
-
-
-def command_shortcut(*children, **props):
-    """Create a CommandShortcut component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CommandShortcut.create(*children, **updated_props)
+command = CommandNamespace()
 
 
 __all__ = [
-    "Command",
-    "command",
+    "CommandRoot",
+    "CommandDialog",
     "CommandInput",
-    "command_input",
     "CommandList",
-    "command_list",
     "CommandEmpty",
-    "command_empty",
     "CommandGroup",
-    "command_group",
     "CommandItem",
-    "command_item",
     "CommandSeparator",
-    "command_separator",
     "CommandShortcut",
-    "command_shortcut",
+    "command",
+    "CommandNamespace",
 ]

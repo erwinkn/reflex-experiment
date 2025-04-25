@@ -1,11 +1,9 @@
-from typing import Literal, Any
+from typing import Any, Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from stoneware_app.components.ui.button import ButtonAttributes
-from ..attributes import HTMLAttributes
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
 
 
-class Carousel(rx.Component, HTMLAttributes):
+class CarouselRoot(HTMLProps):
     """A carousel component based on shadcn/ui."""
 
     library = "$/custom/shadcn/carousel"
@@ -14,88 +12,58 @@ class Carousel(rx.Component, HTMLAttributes):
 
     # Carousel specific props
     orientation: rx.Var[Literal["horizontal", "vertical"]]
+
     opts: rx.Var[dict[str, Any]]
-    plugins: rx.Var[list[Any]]
-    setApi: rx.EventHandler[lambda api: [api]]
+    # Can't handle those ones in Python
+    # plugins: rx.Var[list[Any]]
+    # set_api: TypedEventHandler[Any]
 
 
-class CarouselContent(rx.Component, HTMLAttributes):
+class CarouselContent(HTMLProps):
     """The content container of a carousel."""
 
     library = "$/custom/shadcn/carousel"
     tag = "CarouselContent"
 
 
-class CarouselItem(rx.Component, HTMLAttributes):
+class CarouselItem(HTMLProps):
     """An item within a carousel."""
 
     library = "$/custom/shadcn/carousel"
     tag = "CarouselItem"
 
 
-# Wraps a shadcn Button
-class CarouselPrevious(rx.Component, ButtonAttributes):
+class CarouselPrevious(HTMLButtonProps):
     """A button to navigate to the previous item."""
 
     library = "$/custom/shadcn/carousel"
     tag = "CarouselPrevious"
 
 
-# Wraps a shadcn Button
-class CarouselNext(rx.Component, ButtonAttributes):
+class CarouselNext(HTMLButtonProps):
     """A button to navigate to the next item."""
 
     library = "$/custom/shadcn/carousel"
     tag = "CarouselNext"
 
 
-# Create helper functions
+class CarouselNamespace(rx.ComponentNamespace):
+    root = staticmethod(CarouselRoot.create)
+    content = staticmethod(CarouselContent.create)
+    item = staticmethod(CarouselItem.create)
+    previous = staticmethod(CarouselPrevious.create)
+    next = staticmethod(CarouselNext.create)
 
 
-def carousel(*children, **props):
-    """Create a Carousel component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Carousel.create(*children, **updated_props)
-
-
-def carousel_content(*children, **props):
-    """Create a CarouselContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CarouselContent.create(*children, **updated_props)
-
-
-def carousel_item(*children, **props):
-    """Create a CarouselItem component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CarouselItem.create(*children, **updated_props)
-
-
-def carousel_previous(*children, **props):
-    """Create a CarouselPrevious component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CarouselPrevious.create(*children, **updated_props)
-
-
-def carousel_next(*children, **props):
-    """Create a CarouselNext component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return CarouselNext.create(*children, **updated_props)
+carousel = CarouselNamespace()
 
 
 __all__ = [
-    "Carousel",
-    "carousel",
+    "CarouselRoot",
     "CarouselContent",
-    "carousel_content",
     "CarouselItem",
-    "carousel_item",
     "CarouselPrevious",
-    "carousel_previous",
     "CarouselNext",
-    "carousel_next",
+    "carousel",
+    "CarouselNamespace",
 ]

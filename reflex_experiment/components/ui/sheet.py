@@ -1,204 +1,142 @@
-from typing import Optional, Literal
+from typing import Literal
 import reflex as rx
-from stoneware_app.components.helpers.styling import apply_tailwind_styles
-from ..attributes import GlobalAttributes, HTMLEventHandlersMixin
+from reflex_experiment.attributes import HTMLProps, HTMLButtonProps
+from reflex_experiment.elements import HTMLElement
+from reflex_experiment.events import KeyboardEvent, PointerEvent, SyntheticEvent
+from reflex_experiment.helpers import TypedEventHandler
 
 
-class Sheet(rx.Component, GlobalAttributes):
+class SheetRoot(HTMLProps):
     """A sheet component."""
 
     library = "$/custom/shadcn/sheet"
     tag = "Sheet"
 
     # Sheet specific props
-    defaultOpen: rx.Var[bool] = rx.Var.create(False)
-    open: rx.Var[bool] = rx.Var.create(False)
-    onOpenChange: rx.EventHandler[lambda open: [open]]
-    modal: rx.Var[bool] = rx.Var.create(True)
-    side: rx.Var[Literal["top", "right", "bottom", "left"]] = rx.Var.create("right")
+    default_open: rx.Var[bool]
+    open: rx.Var[bool]
+    on_open_change: TypedEventHandler[bool]
+    modal: rx.Var[bool]
+    side: rx.Var[Literal["top", "right", "bottom", "left"]]
 
 
-class SheetTrigger(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class SheetTrigger(HTMLButtonProps):
     """A button that triggers the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetTrigger"
 
     # SheetTrigger specific props
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    as_child: rx.Var[bool]
 
 
-class SheetClose(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class SheetClose(HTMLButtonProps):
     """A button to close the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetClose"
 
     # SheetClose specific props
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    as_child: rx.Var[bool]
 
 
-class SheetPortal(rx.Component, GlobalAttributes):
+class SheetPortal(HTMLProps):
     """A portal for the sheet content."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetPortal"
 
     # SheetPortal specific props
-    forceMount: rx.Var[bool] = rx.Var.create(False)
-    container: rx.Var[str] = rx.Var.create("")
+    force_mount: rx.Var[bool]
+    container: rx.Var[str]
 
 
-class SheetOverlay(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class SheetOverlay(HTMLProps):
     """The overlay for the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetOverlay"
 
     # SheetOverlay specific props
-    forceMount: rx.Var[bool] = rx.Var.create(False)
+    force_mount: rx.Var[bool]
 
 
-class SheetContent(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class SheetContent(HTMLProps):
     """The content of the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetContent"
 
     # SheetContent specific props
-    forceMount: rx.Var[bool] = rx.Var.create(False)
-    side: rx.Var[Literal["top", "right", "bottom", "left"]] = rx.Var.create("right")
-    onEscapeKeyDown: rx.EventHandler[lambda event: [event]]
-    onPointerDownOutside: rx.EventHandler[lambda event: [event]]
-    onInteractOutside: rx.EventHandler[lambda event: [event]]
+    force_mount: rx.Var[bool]
+    side: rx.Var[Literal["top", "right", "bottom", "left"]]
+    on_escape_key_down: TypedEventHandler[KeyboardEvent[HTMLElement]]
+    on_pointer_down_outside: TypedEventHandler[PointerEvent[HTMLElement]]
+    # Real signature: (event: React.FocusEvent | MouseEvent | TouchEvent) => void
+    on_interact_outside: TypedEventHandler[SyntheticEvent[HTMLElement]]
 
 
-class SheetHeader(rx.Component, GlobalAttributes):
+class SheetHeader(HTMLProps):
     """The header of the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetHeader"
 
 
-class SheetFooter(rx.Component, GlobalAttributes):
+class SheetFooter(HTMLProps):
     """The footer of the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetFooter"
 
 
-class SheetTitle(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class SheetTitle(HTMLProps):
     """The title of the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetTitle"
 
     # SheetTitle specific props
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    as_child: rx.Var[bool]
 
 
-class SheetDescription(rx.Component, GlobalAttributes, HTMLEventHandlersMixin):
+class SheetDescription(HTMLProps):
     """The description of the sheet."""
 
     library = "$/custom/shadcn/sheet"
     tag = "SheetDescription"
 
     # SheetDescription specific props
-    asChild: rx.Var[bool] = rx.Var.create(False)
+    as_child: rx.Var[bool]
 
 
-# Create helper functions
+class SheetNamespace(rx.ComponentNamespace):
+    root = staticmethod(SheetRoot.create)
+    trigger = staticmethod(SheetTrigger.create)
+    close = staticmethod(SheetClose.create)
+    portal = staticmethod(SheetPortal.create)
+    overlay = staticmethod(SheetOverlay.create)
+    content = staticmethod(SheetContent.create)
+    header = staticmethod(SheetHeader.create)
+    footer = staticmethod(SheetFooter.create)
+    title = staticmethod(SheetTitle.create)
+    description = staticmethod(SheetDescription.create)
 
 
-def sheet(*children, **props):
-    """Create a Sheet component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return Sheet.create(*children, **updated_props)
-
-
-def sheet_trigger(*children, **props):
-    """Create a SheetTrigger component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetTrigger.create(*children, **updated_props)
-
-
-def sheet_close(*children, **props):
-    """Create a SheetClose component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetClose.create(*children, **updated_props)
-
-
-def sheet_portal(*children, **props):
-    """Create a SheetPortal component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetPortal.create(*children, **updated_props)
-
-
-def sheet_overlay(*children, **props):
-    """Create a SheetOverlay component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetOverlay.create(*children, **updated_props)
-
-
-def sheet_content(*children, **props):
-    """Create a SheetContent component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetContent.create(*children, **updated_props)
-
-
-def sheet_header(*children, **props):
-    """Create a SheetHeader component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetHeader.create(*children, **updated_props)
-
-
-def sheet_footer(*children, **props):
-    """Create a SheetFooter component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetFooter.create(*children, **updated_props)
-
-
-def sheet_title(*children, **props):
-    """Create a SheetTitle component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetTitle.create(*children, **updated_props)
-
-
-def sheet_description(*children, **props):
-    """Create a SheetDescription component with styling support."""
-    # Apply Tailwind styles from props
-    updated_props = apply_tailwind_styles(**props)
-    return SheetDescription.create(*children, **updated_props)
+sheet = SheetNamespace()
 
 
 __all__ = [
-    "Sheet",
-    "sheet",
+    "SheetRoot",
     "SheetTrigger",
-    "sheet_trigger",
     "SheetClose",
-    "sheet_close",
     "SheetPortal",
-    "sheet_portal",
     "SheetOverlay",
-    "sheet_overlay",
     "SheetContent",
-    "sheet_content",
     "SheetHeader",
-    "sheet_header",
     "SheetFooter",
-    "sheet_footer",
     "SheetTitle",
-    "sheet_title",
     "SheetDescription",
-    "sheet_description",
+    "sheet",
+    "SheetNamespace",
 ]
